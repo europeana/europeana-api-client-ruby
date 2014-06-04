@@ -11,7 +11,7 @@ Gem::Specification.new do |spec|
   spec.description   = %q{Provides an interface to the Europeana API}
   spec.summary       = %q{Search and retrieve records from the Europeana portal API}
   spec.homepage      = ""
-  spec.license       = "MIT"
+  spec.license       = "EUPL 1.1"
 
   spec.files         = `git ls-files`.split($/)
   spec.executables   = spec.files.grep(%r{^bin/}) { |f| File.basename(f) }
