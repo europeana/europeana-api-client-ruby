@@ -1,5 +1,5 @@
 require "europeana/version"
 
 module Europeana
-  # Your code goes here...
+  autoload :API,    'europeana/api'
 end
