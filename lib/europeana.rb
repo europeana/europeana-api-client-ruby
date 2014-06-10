@@ -1,5 +1,5 @@
 require "europeana/version"
 
 module Europeana
-  autoload :API,    'europeana/api'
+  URL = 'http://www.europeana.eu/api/v2'
 end
