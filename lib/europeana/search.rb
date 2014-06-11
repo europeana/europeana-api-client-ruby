@@ -1,7 +1,3 @@
-require "net/http"
-require "uri"
-require "active_support/core_ext/object"
-
 module Europeana
   ##
   # Interface to Europeana API's Search method

@@ -1,6 +1,5 @@
 require 'europeana'
 require 'webmock/rspec'
-require 'json'
 
 Dir["./spec/support/**/*.rb"].each { |f| require f }
 

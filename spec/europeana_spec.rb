@@ -31,4 +31,9 @@ module Europeana
     subject { Europeana.search(@params) }
     it_behaves_like "search request"
   end
+  
+  describe ".search" do
+    subject { Europeana.record(@record_id, @params) }
+    it_behaves_like "record request"
+  end
 end
