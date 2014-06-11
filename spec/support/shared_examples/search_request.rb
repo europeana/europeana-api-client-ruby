@@ -9,7 +9,7 @@ shared_examples "search request" do
   end
   
   context "without API key" do
-    before(:all) do
+    before(:each) do
       Europeana.api_key = nil
     end
     

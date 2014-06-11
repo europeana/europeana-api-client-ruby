@@ -7,6 +7,10 @@ module Europeana
       @api_key = "xyz"
     end
     
+    before(:each) do
+      Europeana.api_key = @api_key
+    end
+    
     describe "#new" do
       context "with no API request params" do
         subject { lambda { Europeana::Search.new } }
@@ -46,13 +50,22 @@ module Europeana
       end
     end
     
+    describe "#request_uri" do
+      it "returns a URI" do
+        expect(subject.request_uri).to be_a(URI)
+      end
+      
+      it "includes request params" do
+        expect(subject.request_uri.to_s).to eq("http://www.europeana.eu/api/v2/search.json?query=&wskey=#{@api_key}")
+      end
+    end
+    
     describe "#params_with_authentication" do
       subject { Europeana::Search.new }
       
       context "with API key" do
         it "adds API key to params" do
           subject.params = @params
-          Europeana.api_key = @api_key
           expect(subject.params_with_authentication).to eq(@params.merge(:wskey => @api_key))
         end
       end

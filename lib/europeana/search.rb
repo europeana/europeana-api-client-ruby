@@ -22,8 +22,7 @@ module Europeana
     # Sends the Search request to the API
     #
     def execute
-      uri = URI.parse(Europeana::URL + "/search.json")
-      uri.query = params_with_authentication.to_query
+      uri = request_uri
       http = Net::HTTP.new(uri.host, uri.port)
       request = Net::HTTP::Get.new(uri.request_uri)
       response = http.request(request)
@@ -59,6 +58,17 @@ module Europeana
     def params=(params = {})
       params.assert_valid_keys(:query, :profile, :qf, :rows, :start, :callback)
       @params = params
+    end
+    
+    ##
+    # Gets the URI for this Search request with parameters
+    #
+    # @return [URI]
+    #
+    def request_uri
+      uri = URI.parse(Europeana::URL + "/search.json")
+      uri.query = params_with_authentication.to_query
+      uri
     end
   end
 end
