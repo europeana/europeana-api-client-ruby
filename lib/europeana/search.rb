@@ -3,14 +3,19 @@ require "uri"
 require "active_support/core_ext/object"
 
 module Europeana
+  ##
+  # Interface to Europeana API's Search method
+  #
   class Search
+    # Query params
     attr_accessor :params
     
     ##
     # @param [Hash] params Europeana API request parameters for Search query
+    # @see #params=
     #
     def initialize(params = {})
-      @params = params
+      self.params = params
     end
     
     ##
@@ -25,9 +30,35 @@ module Europeana
       JSON.parse(response.body)
     end
     
+    ##
+    # Returns query params with API key added
+    #
+    # @return [Hash]
+    #
     def params_with_authentication
       raise Europeana::Errors::MissingAPIKeyError unless Europeana.api_key.present?
       params.merge(:wskey => Europeana.api_key).reverse_merge(:query => "")
+    end
+    
+    ##
+    # Sets request parameters after validating keys
+    #
+    # Valid parameter keys:
+    # * :query
+    # * :profile
+    # * :qf
+    # * :rows
+    # * :start
+    # * :callback
+    #
+    # For explanations of these request parameters, see: http://labs.europeana.eu/api/search/
+    #
+    # @param (see #initialize)
+    # @return [Hash] Passed params, if valid
+    #
+    def params=(params = {})
+      params.assert_valid_keys(:query, :profile, :qf, :rows, :start, :callback)
+      @params = params
     end
   end
 end

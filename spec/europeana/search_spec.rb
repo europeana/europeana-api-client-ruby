@@ -3,7 +3,7 @@ require 'spec_helper'
 module Europeana
   describe Search do
     before(:all) do
-      @params = { :query => "test" }
+      @params = { :query => "test", :profile => "standard", :qf => "where:London", :rows => 100, :start => 1, :callback => "" }
       @api_key = "xyz"
     end
     
@@ -34,9 +34,15 @@ module Europeana
     describe "#params=" do
       subject { Europeana::Search.new }
       
-      it "sets params attribute" do
-        subject.params = @params
-        expect(subject.instance_variable_get(:@params)).to eq(@params)
+      context "valid params" do
+        it "sets params attribute" do
+          subject.params = @params
+          expect(subject.instance_variable_get(:@params)).to eq(@params)
+        end
+      end
+      
+      it "validates param names" do
+        expect { subject.params = { :invalid => "parameter" } }.to raise_error("Unknown key: invalid")
       end
     end
     

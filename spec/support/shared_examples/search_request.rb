@@ -1,6 +1,7 @@
 shared_examples "search request" do
   before(:all) do
     @api_key = "xyz"
+    @params = {}
   end
   
   before(:each) do
@@ -14,7 +15,7 @@ shared_examples "search request" do
     
     it "sends no HTTP request" do
       begin
-        subject.execute
+        subject
       rescue Europeana::Errors::MissingAPIKeyError
       end
       expect(a_request(:get, /www.europeana.eu\/api\/v2\/search\.json/)).not_to have_been_made
@@ -24,7 +25,6 @@ shared_examples "search request" do
   context "with API key" do
     before(:all) do
       Europeana.api_key = @api_key
-      @params = {}
     end
     
     it "sends a Search request to the API" do
@@ -38,9 +38,6 @@ shared_examples "search request" do
     end
     
     context "without query" do
-      before(:all) do
-        @params = {}
-      end
       it "sets an empty query" do
         subject
         expect(a_request(:get, /www.europeana.eu\/api\/v2\/search\.json\?query=/)).to have_been_made.once
