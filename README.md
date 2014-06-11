@@ -1,6 +1,6 @@
 # Europeana
 
-Search and retrieve records from the Europeana portal API
+Search and retrieve records from the Europeana portal API.
 
 ## Installation
 
@@ -18,7 +18,15 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+### Authentication
+
+Only Basic Authentication (by API key) is supported. 
+
+Sign up for an API key at: http://labs.europeana.eu/api/registration/
+
+Configure your application with the API key:
+
+    Europeana.api_key = "xyz"
 
 ## Contributing
 
