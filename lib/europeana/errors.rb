@@ -19,5 +19,20 @@ Set the key with:
         super(msg)
        end
     end
+    
+    ##
+    # Raised if the API response success flag is false, indicating a problem
+    # with the request.
+    #
+    class RequestError < StandardError
+      def initialize(msg = nil)
+        msg ||= <<-MSG
+Request error.
+
+There was a problem with your request to the API.
+        MSG
+        super(msg)
+       end
+    end
   end
 end

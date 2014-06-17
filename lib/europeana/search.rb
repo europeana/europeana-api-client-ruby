@@ -32,7 +32,9 @@ module Europeana
         retry
       end
       
-      JSON.parse(response.body)
+      json = JSON.parse(response.body)
+      raise Errors::RequestError, json['error'] unless json['success']
+      json
     end
     
     ##

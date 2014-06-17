@@ -8,19 +8,7 @@ shared_examples "search request" do
     stub_request(:get, /www.europeana.eu\/api\/v2\/search\.json/).to_return(:body => '{"success":true}')
   end
   
-  context "without API key" do
-    before(:each) do
-      Europeana.api_key = nil
-    end
-    
-    it "sends no HTTP request" do
-      begin
-        subject
-      rescue Europeana::Errors::MissingAPIKeyError
-      end
-      expect(a_request(:get, /www.europeana.eu\/api\/v2\/search\.json/)).not_to have_been_made
-    end
-  end
+  it_behaves_like "API request"
   
   context "with API key" do
     before(:all) do
@@ -51,20 +39,6 @@ shared_examples "search request" do
       it "sends query" do
         subject
         expect(a_request(:get, /www.europeana.eu\/api\/v2\/search\.json\?query=test/)).to have_been_made.once
-      end
-    end
-    
-    context "when the API is unavailable" do
-      before(:each) do
-        Europeana.retry_delay = 0
-      end
-      
-      it "waits then retries" do
-        stub_request(:get, /www.europeana.eu\/api\/v2\/search\.json/).
-          to_timeout.times(1).then.
-          to_return(:body => '{"success":true}')
-        subject
-        expect(a_request(:get, /www.europeana.eu\/api\/v2\/search\.json/)).to have_been_made.times(2)
       end
     end
   end
