@@ -29,10 +29,24 @@ Set the key with:
         msg ||= <<-MSG
 Request error.
 
-There was a problem with your request to the API.
+There was a problem with your request to the Europeana API.
         MSG
         super(msg)
        end
     end
-  end
-end
+    
+    ##
+    # Raised if the API response is not valid JSON.
+    #
+    class ResponseError < StandardError
+      def initialize(msg = nil)
+        msg ||= <<-MSG
+Response error.
+
+Unable to parse the response from the Europeana API.
+        MSG
+        super(msg)
+       end
+    end
+  end # Europeana::Errors
+end # Europeana

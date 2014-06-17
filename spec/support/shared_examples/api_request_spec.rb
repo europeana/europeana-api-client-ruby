@@ -33,9 +33,16 @@ shared_examples "API request" do
     end
     
     context "when API response is unsuccessful" do
-      it "raises an error" do
+      it "raises a RequestError" do
         stub_request(:get, /www.europeana.eu\/api\/v2/).to_return(:body => '{"success":false,"error":"Something went wrong"}')
         expect { subject }.to raise_error(Europeana::Errors::RequestError, "Something went wrong")
+      end
+    end
+    
+    context "when API response is invalid JSON" do
+      it "raises a ResponseError" do
+        stub_request(:get, /www.europeana.eu\/api\/v2/).to_return(:body => 'invalid JSON')
+        expect { subject }.to raise_error(Europeana::Errors::ResponseError)
       end
     end
   end

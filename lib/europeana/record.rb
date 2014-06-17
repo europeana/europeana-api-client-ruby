@@ -92,6 +92,8 @@ module Europeana
       json = JSON.parse(response.body)
       raise Errors::RequestError, json['error'] unless json['success']
       json
+    rescue JSON::ParserError
+      raise Errors::ResponseError
     end
   end
 end
