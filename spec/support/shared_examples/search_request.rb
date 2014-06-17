@@ -53,5 +53,19 @@ shared_examples "search request" do
         expect(a_request(:get, /www.europeana.eu\/api\/v2\/search\.json\?query=test/)).to have_been_made.once
       end
     end
+    
+    context "when the API is unavailable" do
+      before(:each) do
+        Europeana.retry_delay = 0
+      end
+      
+      it "waits then retries" do
+        stub_request(:get, /www.europeana.eu\/api\/v2\/search\.json/).
+          to_timeout.times(1).then.
+          to_return(:body => '{"success":true}')
+        subject
+        expect(a_request(:get, /www.europeana.eu\/api\/v2\/search\.json/)).to have_been_made.times(2)
+      end
+    end
   end
 end

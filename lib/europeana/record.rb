@@ -78,7 +78,17 @@ module Europeana
       uri = request_uri
       http = Net::HTTP.new(uri.host, uri.port)
       request = Net::HTTP::Get.new(uri.request_uri)
-      response = http.request(request)
+      retries = Europeana.max_retries
+      
+      begin
+        response = http.request(request)
+      rescue Timeout::Error, Errno::ECONNREFUSED, EOFError
+        retries -= 1
+        raise unless retries > 0
+        sleep Europeana.retry_delay
+        retry
+      end
+      
       JSON.parse(response.body)
     end
   end

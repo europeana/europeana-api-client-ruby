@@ -37,5 +37,19 @@ shared_examples "record request" do
       response = subject
       expect(response).to be_a(Hash)
     end
+    
+    context "when the API is unavailable" do
+      before(:each) do
+        Europeana.retry_delay = 0
+      end
+      
+      it "waits then retries" do
+        stub_request(:get, /www.europeana.eu\/api\/v2\/record#{@record_id}\.json/).
+          to_timeout.times(1).then.
+          to_return(:body => '{"success":true}')
+        subject
+        expect(a_request(:get, /www.europeana.eu\/api\/v2\/record#{@record_id}\.json/)).to have_been_made.times(2)
+      end
+    end
   end
 end

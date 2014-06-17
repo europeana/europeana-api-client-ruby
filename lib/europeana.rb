@@ -11,22 +11,34 @@ module Europeana
   autoload :Search, 'europeana/search'
   
   class << self
-    ##
-    # Sets the API key
-    #
-    # @param [String] api_key
-    #
-    def api_key=(api_key)
-      @api_key = api_key
-    end
+    # The Europeana API key, required for authentication
+    attr_accessor :api_key
     
     ##
-    # Gets the API key
+    # The maximum number of retries permitted
     #
-    # @return [String]
+    # Retries occur when a network request to the API fails. The default is 5
+    # retries before giving up.
     #
-    def api_key
-      @api_key
+    # @return [Integer]
+    #
+    attr_accessor :max_retries
+    
+    ##
+    # The number of seconds to wait between retries
+    #
+    # The default is 10 seconds.
+    #
+    # @return [Integer]
+    #
+    attr_accessor :retry_delay
+    
+    ##
+    # Sets configuration values to their defaults
+    #
+    def defaults!
+      self.max_retries = 5
+      self.retry_delay = 10
     end
     
     ##
@@ -61,4 +73,5 @@ module Europeana
     end
   end
   
+  self.defaults!
 end
