@@ -93,7 +93,13 @@ module Europeana
       raise Errors::RequestError, json['error'] unless json['success']
       json
     rescue JSON::ParserError
-      raise Errors::ResponseError
+      if response.code.to_i == 404
+        # Handle HTML 404 responses on malformed record ID, emulating API's
+        # JSON response.
+        raise Errors::RequestError, "Invalid record identifier: #{@id}"
+      else
+        raise Errors::ResponseError
+      end
     end
   end
 end

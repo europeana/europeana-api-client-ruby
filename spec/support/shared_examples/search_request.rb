@@ -20,11 +20,6 @@ shared_examples "search request" do
       expect(a_request(:get, /www.europeana.eu\/api\/v2\/search\.json/)).to have_been_made.once
     end
     
-    it "returns the response as a Hash" do
-      response = subject
-      expect(response).to be_a(Hash)
-    end
-    
     context "without query" do
       it "sets an empty query" do
         subject

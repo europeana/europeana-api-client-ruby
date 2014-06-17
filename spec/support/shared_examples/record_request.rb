@@ -21,9 +21,12 @@ shared_examples "record request" do
       expect(a_request(:get, /www.europeana.eu\/api\/v2\/record#{@record_id}\.json/)).to have_been_made.once
     end
     
-    it "returns the response as a Hash" do
-      response = subject
-      expect(response).to be_a(Hash)
+    context "when record ID is invalid" do
+      it "raises RequestError from HTML 404 response" do
+        stub_request(:get, /www.europeana.eu\/api\/v2\/record#{@record_id}\.json/).
+          to_return(:body => '<html></html>', :headers => { 'Content-Type' => 'text/html' }, :status => 404)
+        expect { subject }.to raise_error(Europeana::Errors::RequestError, "Invalid record identifier: #{@record_id}")
+      end
     end
   end
 end

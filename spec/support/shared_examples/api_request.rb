@@ -18,6 +18,11 @@ shared_examples "API request" do
       Europeana.api_key = "xyz"
     end
     
+    it "returns the response as a Hash" do
+      response = subject
+      expect(response).to be_a(Hash)
+    end
+    
     context "when the API is unavailable" do
       before(:each) do
         Europeana.retry_delay = 0
