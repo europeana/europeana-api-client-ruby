@@ -48,6 +48,10 @@ module Europeana
     #
     # For explanations of these request parameters, see: http://labs.europeana.eu/api/search/
     #
+    # Multiple `qf` parameters can be passed as a {Hash}:
+    #
+    #     Europeana::Search.new(:qf => { :what => "Photograph", :where => [ "Paris", "London" ] })
+    #
     # @param (see #initialize)
     # @return [Hash] Passed params, if valid
     #
@@ -63,7 +67,20 @@ module Europeana
     #
     def request_uri
       uri = URI.parse(Europeana::URL + "/search.json")
-      uri.query = params_with_authentication.to_query
+      request_params = params_with_authentication
+
+      if request_params[:qf].is_a?(Hash)
+        qf = request_params.delete(:qf)
+        uri.query = request_params.to_query
+        qf.each_pair do |name, criteria|
+          [ criteria ].flatten.each do |criterion|
+            uri.query = uri.query + "&qf=" + CGI::escape(name.to_s) + ":" + CGI::escape(criterion)
+          end
+        end
+      else
+        uri.query = request_params.to_query
+      end
+      
       uri
     end
   end

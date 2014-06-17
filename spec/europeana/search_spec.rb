@@ -58,6 +58,11 @@ module Europeana
       it "includes request params" do
         expect(subject.request_uri.to_s).to eq("http://www.europeana.eu/api/v2/search.json?query=&wskey=#{@api_key}")
       end
+      
+      it "handles Hash of qf params" do
+        subject.params[:qf] = { :where => [ "London", "Paris" ], :what => "Photograph" }
+        expect(subject.request_uri.to_s).to eq("http://www.europeana.eu/api/v2/search.json?query=&wskey=#{@api_key}&qf=where:London&qf=where:Paris&qf=what:Photograph")
+      end
     end
     
     describe "#params_with_authentication" do
