@@ -8,8 +8,8 @@ Gem::Specification.new do |spec|
   spec.version       = Europeana::VERSION
   spec.authors       = ["Richard Doe"]
   spec.email         = ["richard.doe@rwdit.net"]
-  spec.description   = %q{Provides an interface to the Europeana API}
-  spec.summary       = %q{Search and retrieve records from the Europeana portal API}
+  spec.description   = %q{Search and retrieve records from the Europeana REST API}
+  spec.summary       = %q{Ruby client library for the Europeana API}
   spec.homepage      = "https://github.com/europeana/europeana-client-ruby"
   spec.license       = "EUPL 1.1"
 

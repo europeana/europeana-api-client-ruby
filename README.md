@@ -1,6 +1,7 @@
 # Europeana
 
-Search and retrieve records from the Europeana portal API.
+Ruby client library for the search and retrieval of records from the [Europeana
+REST API](http://labs.europeana.eu/api/introduction/).
 
 ## Installation
 
