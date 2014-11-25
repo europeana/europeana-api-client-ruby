@@ -87,7 +87,7 @@ module Europeana
       end
       
       it "validates param names" do
-        expect { subject.params = { :invalid => "parameter" } }.to raise_error("Unknown key: invalid")
+        expect { subject.params = { :invalid => "parameter" } }.to raise_error(/Unknown key: :?invalid/)
       end
     end
     
