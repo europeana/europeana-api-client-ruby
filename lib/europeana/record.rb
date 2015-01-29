@@ -20,6 +20,7 @@ module Europeana
     def initialize(id, params = {})
       self.id = id
       self.params = params
+      @hierarchy = HashWithIndifferentAccess.new
     end
     
     ##
@@ -109,8 +110,21 @@ module Europeana
     # @note Proof of concept implementation for demo purposes.
     # @todo Refactor if functionality to be retained.
     #
-    def ancestor_self_siblings
-      uri = ancestor_self_siblings_uri
+    def hierarchy(*args)
+      args = [ :self ] if args.blank?
+      
+      data = {}
+      args.each do |method|
+        unless @hierarchy.has_key?(method)
+          @hierarchy[method] = hierarchical_data(method).select { |k, v| v.is_a?(Enumerable) }
+        end
+        data.merge!(@hierarchy[method])
+      end
+      data
+    end
+    
+    def hierarchical_data(method = :self)
+      uri = hierarchical_data_uri(method)
       http = Net::HTTP.new(uri.host, uri.port)
       request = Net::HTTP::Get.new(uri.request_uri)
       retries = Europeana.max_retries
@@ -137,8 +151,8 @@ module Europeana
       end
     end
     
-    def ancestor_self_siblings_uri
-      uri = URI.parse(Europeana::URL + "/record" + "#{@id}/ancestor-self-siblings.json")
+    def hierarchical_data_uri(method = :self)
+      uri = URI.parse(Europeana::URL + "/record" + "#{@id}/#{method.to_s}.json")
       uri.query = params_with_authentication.to_query
       uri
     end
