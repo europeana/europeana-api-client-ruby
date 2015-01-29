@@ -67,6 +67,7 @@ module Europeana
     def request_uri
       uri = URI.parse(Europeana::URL + "/record" + "#{@id}.json")
       uri.query = params_with_authentication.to_query
+      Europeana.logger.debug("Europeana API request URL: #{uri.to_s}")
       uri
     end
     
@@ -154,6 +155,7 @@ module Europeana
     def hierarchical_data_uri(method = :self)
       uri = URI.parse(Europeana::URL + "/record" + "#{@id}/#{method.to_s}.json")
       uri.query = params_with_authentication.to_query
+      Europeana.logger.debug("Europeana API request URL: #{uri.to_s}")
       uri
     end
   end

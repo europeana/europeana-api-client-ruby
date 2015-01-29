@@ -95,6 +95,7 @@ module Europeana
         uri.query = request_params.to_query
       end
       
+      Europeana.logger.debug("Europeana API request URL: #{uri.to_s}")
       uri
     end
   end
