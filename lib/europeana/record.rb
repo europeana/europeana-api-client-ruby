@@ -101,5 +101,46 @@ module Europeana
         raise Errors::ResponseError
       end
     end
+    
+    ##
+    # Gets hierarchy data about this and related records from 
+    # ancestor-self-siblings.json API method
+    #
+    # @note Proof of concept implementation for demo purposes.
+    # @todo Refactor if functionality to be retained.
+    #
+    def ancestor_self_siblings
+      uri = ancestor_self_siblings_uri
+      http = Net::HTTP.new(uri.host, uri.port)
+      request = Net::HTTP::Get.new(uri.request_uri)
+      retries = Europeana.max_retries
+      
+      begin
+        response = http.request(request)
+      rescue Timeout::Error, Errno::ECONNREFUSED, EOFError
+        retries -= 1
+        raise unless retries > 0
+        sleep Europeana.retry_delay
+        retry
+      end
+      
+      json = JSON.parse(response.body)
+      raise Errors::RequestError, json['message'] unless json['success']
+      json
+    rescue JSON::ParserError
+      if response.code.to_i == 404
+        # Handle HTML 404 responses on malformed record ID, emulating API's
+        # JSON response.
+        raise Errors::RequestError, "Invalid record identifier: #{@id}"
+      else
+        raise Errors::ResponseError
+      end
+    end
+    
+    def ancestor_self_siblings_uri
+      uri = URI.parse(Europeana::URL + "/record" + "#{@id}/ancestor-self-siblings.json")
+      uri.query = params_with_authentication.to_query
+      uri
+    end
   end
 end
