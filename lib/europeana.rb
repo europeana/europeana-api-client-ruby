@@ -71,6 +71,17 @@ module Europeana
     def record(record_id, params = {})
       Record.new(record_id, params).get
     end
+    
+    def logger
+      unless @logger
+        if defined?(Rails) && Rails.logger
+          @logger = Rails.logger
+        else
+          @logger = Logger.new(STDOUT)
+        end
+      end
+      @logger
+    end
   end
   
   self.defaults!
