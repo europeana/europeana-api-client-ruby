@@ -74,7 +74,7 @@ describe Europeana do
     it_behaves_like "search request"
   end
   
-  describe ".search" do
+  describe ".record" do
     subject { Europeana.record(@record_id, @params) }
     it_behaves_like "record request"
   end
