@@ -1,5 +1,3 @@
-require "uri"
-
 module Europeana
   ##
   # Interface to the Europeana API Record method
@@ -67,33 +65,24 @@ module Europeana
     def request_uri
       uri = URI.parse(Europeana::URL + "/record" + "#{@id}.json")
       uri.query = params_with_authentication.to_query
-      Europeana.logger.debug("Europeana API request URL: #{uri.to_s}")
       uri
     end
     
     ##
     # Sends a request for this record to the API
     #
-    # @return [Hash] Record data
+    # @return (see Europeana::Request#execute)
+    # @raise [Europeana::Errors::ResponseError] if API response could not be
+    #   parsed as JSON
+    # @raise [Europeana::Errors::RequestError] if API response has `success:false`
+    # @raise [Europeana::Errors::RequestError] if API response has 404 status code
     #
     def get
-      uri = request_uri
-      http = Net::HTTP.new(uri.host, uri.port)
-      request = Net::HTTP::Get.new(uri.request_uri)
-      retries = Europeana.max_retries
-      
-      begin
-        response = http.request(request)
-      rescue Timeout::Error, Errno::ECONNREFUSED, EOFError
-        retries -= 1
-        raise unless retries > 0
-        sleep Europeana.retry_delay
-        retry
-      end
-      
-      json = JSON.parse(response.body)
-      raise Errors::RequestError, json['error'] unless json['success']
-      json
+      request = Europeana::Request.new(request_uri)
+      response = request.execute
+      body = JSON.parse(response.body)
+      raise Errors::RequestError, body['error'] unless body['success']
+      body
     rescue JSON::ParserError
       if response.code.to_i == 404
         # Handle HTML 404 responses on malformed record ID, emulating API's
@@ -125,23 +114,11 @@ module Europeana
     end
     
     def hierarchical_data(method = :self)
-      uri = hierarchical_data_uri(method)
-      http = Net::HTTP.new(uri.host, uri.port)
-      request = Net::HTTP::Get.new(uri.request_uri)
-      retries = Europeana.max_retries
-      
-      begin
-        response = http.request(request)
-      rescue Timeout::Error, Errno::ECONNREFUSED, EOFError
-        retries -= 1
-        raise unless retries > 0
-        sleep Europeana.retry_delay
-        retry
-      end
-      
-      json = JSON.parse(response.body)
-      raise Errors::RequestError, json['message'] unless json['success']
-      json
+      request = Request.new(hierarchical_data_uri(method))
+      response = request.execute
+      body = JSON.parse(response.body)
+      raise Errors::RequestError, body['message'] unless body['success']
+      body
     rescue JSON::ParserError
       if response.code.to_i == 404
         # Handle HTML 404 responses on malformed record ID, emulating API's
@@ -155,7 +132,6 @@ module Europeana
     def hierarchical_data_uri(method = :self)
       uri = URI.parse(Europeana::URL + "/record" + "#{@id}/#{method.to_s}.json")
       uri.query = params_with_authentication.to_query
-      Europeana.logger.debug("Europeana API request URL: #{uri.to_s}")
       uri
     end
   end

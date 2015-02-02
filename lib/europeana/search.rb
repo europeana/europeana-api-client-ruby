@@ -17,24 +17,17 @@ module Europeana
     ##
     # Sends the Search request to the API
     #
+    # @return (see JSON.parse)
+    # @raise [Europeana::Errors::ResponseError] if API response could not be
+    #   parsed as JSON
+    # @raise [Europeana::Errors::RequestError] if API response has `success:false`
+    #
     def execute
-      uri = request_uri
-      http = Net::HTTP.new(uri.host, uri.port)
-      request = Net::HTTP::Get.new(uri.request_uri)
-      retries = Europeana.max_retries
-      
-      begin
-        response = http.request(request)
-      rescue Timeout::Error, Errno::ECONNREFUSED, EOFError
-        retries -= 1
-        raise unless retries > 0
-        sleep Europeana.retry_delay
-        retry
-      end
-      
-      json = JSON.parse(response.body)
-      raise Errors::RequestError, json['error'] unless json['success']
-      json
+      request = Europeana::Request.new(request_uri)
+      response = request.execute
+      body = JSON.parse(response.body)
+      raise Errors::RequestError, body['error'] unless body['success']
+      body
     rescue JSON::ParserError
       raise Errors::ResponseError
     end
@@ -95,7 +88,6 @@ module Europeana
         uri.query = request_params.to_query
       end
       
-      Europeana.logger.debug("Europeana API request URL: #{uri.to_s}")
       uri
     end
   end

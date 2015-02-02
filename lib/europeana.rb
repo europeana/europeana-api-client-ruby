@@ -1,14 +1,17 @@
 require "europeana/version"
-require "net/http"
 require "uri"
+require "logger"
 require "active_support/core_ext/object"
+require "active_support/hash_with_indifferent_access"
 
 module Europeana
-  URL = 'http://www.europeana.eu/api/v2'
+  API_VERSION = 'v2'
+  URL = "http://www.europeana.eu/api/#{API_VERSION}"
   
-  autoload :Errors, 'europeana/errors'
-  autoload :Record, 'europeana/record'
-  autoload :Search, 'europeana/search'
+  autoload :Errors,   'europeana/errors'
+  autoload :Record,   'europeana/record'
+  autoload :Request,  'europeana/request'
+  autoload :Search,   'europeana/search'
   
   class << self
     # The Europeana API key, required for authentication
