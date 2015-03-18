@@ -1,22 +1,24 @@
-require "europeana/version"
-require "uri"
-require "logger"
-require "active_support/core_ext/object"
-require "active_support/hash_with_indifferent_access"
+require 'europeana/version'
+require 'uri'
+require 'logger'
+require 'active_support/core_ext/object'
+require 'active_support/hash_with_indifferent_access'
 
+##
+# Europeana REST API client
 module Europeana
   API_VERSION = 'v2'
   URL = "http://www.europeana.eu/api/#{API_VERSION}"
-  
+
   autoload :Errors,   'europeana/errors'
   autoload :Record,   'europeana/record'
   autoload :Request,  'europeana/request'
   autoload :Search,   'europeana/search'
-  
+
   class << self
     # The Europeana API key, required for authentication
     attr_accessor :api_key
-    
+
     ##
     # The maximum number of retries permitted
     #
@@ -26,7 +28,7 @@ module Europeana
     # @return [Integer]
     #
     attr_accessor :max_retries
-    
+
     ##
     # The number of seconds to wait between retries
     #
@@ -35,7 +37,7 @@ module Europeana
     # @return [Integer]
     #
     attr_accessor :retry_delay
-    
+
     ##
     # Sets configuration values to their defaults
     #
@@ -43,7 +45,7 @@ module Europeana
       self.max_retries = 5
       self.retry_delay = 10
     end
-    
+
     ##
     # Sends a Search request to the Europeana API
     #
@@ -58,7 +60,7 @@ module Europeana
     def search(params = {})
       Search.new(params).execute
     end
-    
+
     ##
     # Sends a Record request to the Europeana API
     #
@@ -74,7 +76,7 @@ module Europeana
     def record(record_id, params = {})
       Record.new(record_id, params).get
     end
-    
+
     def logger
       unless @logger
         if defined?(Rails) && Rails.logger
@@ -86,6 +88,6 @@ module Europeana
       @logger
     end
   end
-  
+
   self.defaults!
 end
