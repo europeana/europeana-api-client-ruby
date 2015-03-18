@@ -11,13 +11,13 @@ module Europeana
     # @see #params=
     #
     def initialize(params = {})
-      self.params = params
+      self.params = HashWithIndifferentAccess.new(params)
     end
     
     ##
     # Sends the Search request to the API
     #
-    # @return (see JSON.parse)
+    # @return [HashWithIndifferentAccess]
     # @raise [Europeana::Errors::ResponseError] if API response could not be
     #   parsed as JSON
     # @raise [Europeana::Errors::RequestError] if API response has `success:false`
@@ -27,7 +27,7 @@ module Europeana
       response = request.execute
       body = JSON.parse(response.body)
       raise Errors::RequestError, body['error'] unless body['success']
-      body
+      HashWithIndifferentAccess.new(body)
     rescue JSON::ParserError
       raise Errors::ResponseError
     end
@@ -38,8 +38,9 @@ module Europeana
     # @return [Hash]
     #
     def params_with_authentication
+      return params if params.key?(:wskey)
       raise Europeana::Errors::MissingAPIKeyError unless Europeana.api_key.present?
-      params.merge(:wskey => Europeana.api_key).reverse_merge(:query => "")
+      params.merge(:wskey => Europeana.api_key) #.reverse_merge(:query => "")
     end
     
     ##
@@ -62,10 +63,10 @@ module Europeana
     # @param (see #initialize)
     # @return [Hash] Passed params, if valid
     #
-    def params=(params = {})
-      params.assert_valid_keys(:query, :profile, :qf, :rows, :start, :callback)
-      @params = params
-    end
+#    def params=(params = {})
+#      params.assert_valid_keys(:query, :profile, :qf, :rows, :start, :callback)
+#      @params = params
+#    end
     
     ##
     # Gets the URI for this Search request with parameters
@@ -73,20 +74,26 @@ module Europeana
     # @return [URI]
     #
     def request_uri
-      uri = URI.parse(Europeana::URL + "/search.json")
-      request_params = params_with_authentication
-
-      if request_params[:qf].is_a?(Hash)
-        qf = request_params.delete(:qf)
-        uri.query = request_params.to_query
-        qf.each_pair do |name, criteria|
-          [ criteria ].flatten.each do |criterion|
-            uri.query = uri.query + "&qf=" + CGI::escape(name.to_s) + ":" + CGI::escape(criterion)
-          end
+      uri = URI.parse(Europeana::URL + '/search.json')
+      uri.query = ''
+      params_with_authentication.each_pair do |name, value|
+        [value].flatten.each do |v|
+          uri.query << '&' unless uri.query.blank?
+          uri.query << CGI::escape(name.to_s) + '=' + CGI::escape(v.to_s)
         end
-      else
-        uri.query = request_params.to_query
       end
+#      if request_params[:qf].is_a?(Hash)
+#        qf = request_params.delete(:qf)
+#        uri.query = request_params.to_query
+#        qf.each_pair do |name, criteria|
+#          [ criteria ].flatten.each do |criterion|
+#            uri.query = uri.query + '&qf=' + CGI::escape(name.to_s) + ':' + CGI::escape(criterion)
+#          end
+#        end
+#      elsif 
+#      else
+#        uri.query = request_params.to_query
+#      end
       
       uri
     end

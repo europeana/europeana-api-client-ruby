@@ -37,7 +37,9 @@ module Europeana
     # @param [String] id Record ID
     #
     def id=(id)
-      raise ArgumentError, "Invalid Europeana record ID." unless id.is_a?(String) && id.match(/\A\/[^\/]+\/[^\/]+\B/)
+      unless id.is_a?(String) && id.match(/\A\/[^\/]+\/[^\/]+\B/)
+        fail ArgumentError, "Invalid Europeana record ID: \"#{id.to_s}\""
+      end
       @id = id
     end
     
@@ -71,7 +73,7 @@ module Europeana
     ##
     # Sends a request for this record to the API
     #
-    # @return (see Europeana::Request#execute)
+    # @return [HashWithIndifferentAccess]
     # @raise [Europeana::Errors::ResponseError] if API response could not be
     #   parsed as JSON
     # @raise [Europeana::Errors::RequestError] if API response has `success:false`
@@ -82,7 +84,7 @@ module Europeana
       response = request.execute
       body = JSON.parse(response.body)
       raise Errors::RequestError, body['error'] unless body['success']
-      body
+      HashWithIndifferentAccess.new(body)
     rescue JSON::ParserError
       if response.code.to_i == 404
         # Handle HTML 404 responses on malformed record ID, emulating API's
