@@ -1,16 +1,16 @@
 # coding: utf-8
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'europeana/version'
+require 'europeana/api/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = 'europeana'
-  spec.version       = Europeana::VERSION
+  spec.name          = 'europeana-api'
+  spec.version       = Europeana::API::VERSION
   spec.authors       = ['Richard Doe']
   spec.email         = ['richard.doe@rwdit.net']
   spec.description   = 'Search and retrieve records from the Europeana REST API'
   spec.summary       = 'Ruby client library for the Europeana API'
-  spec.homepage      = 'https://github.com/europeana/europeana-client-ruby'
+  spec.homepage      = 'https://github.com/rwd/europeana-api-client-ruby'
   spec.license       = 'EUPL 1.1'
 
   spec.files         = `git ls-files`.split($RS)
