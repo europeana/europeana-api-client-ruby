@@ -32,7 +32,8 @@ Sign up for an API key at: http://labs.europeana.eu/api/registration/
 Configure your application with the API key:
 
 ```ruby
-Europeana::API.api_key = "xyz"
+require 'europeana/api'
+Europeana::API.api_key = 'xyz'
 ```
 
 ### Search
