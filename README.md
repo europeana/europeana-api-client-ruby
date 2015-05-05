@@ -7,7 +7,9 @@ REST API](http://labs.europeana.eu/api/introduction/).
 
 Add this line to your application's Gemfile:
 
-    gem 'europeana-api'
+```ruby
+gem 'europeana-api'
+```
 
 And then execute:
 
@@ -29,21 +31,27 @@ Sign up for an API key at: http://labs.europeana.eu/api/registration/
 
 Configure your application with the API key:
 
-    Europeana::API.api_key = "xyz"
+```ruby
+Europeana::API.api_key = "xyz"
+```
 
 ### Search
 
-    search = Europeana::API.search(:query => '"first world war"') # => { "success" => true, "items" => [ ... ], "totalResults" => 1234, ... }
-    search["items"] # => [ item1, item2, ... ]
-    search["totalResults"] # => 1234
-    
+```ruby
+search = Europeana::API.search(query: '"first world war"') # => { "success" => true, "items" => [ ... ], "totalResults" => 1234, ... }
+search['items'] # => [ item1, item2, ... ]
+search['totalResults'] # => 1234
+```
+
 See http://labs.europeana.eu/api/search/ for details of the data returned in
 the search response.
 
 ### Record
 
-    record = Europeana::API.record("abc/1234") # => { "success" => true, "object" => { ... }, ... }
-    record["object"] # => { "title" => "...", "proxies" => [ ... ], "aggregations" => [ ... ]
+```ruby
+record = Europeana::API.record('abc/1234') # => { "success" => true, "object" => { ... }, ... }
+record['object'] # => { "title" => "...", "proxies" => [ ... ], "aggregations" => [ ... ]
+```
 
 See http://labs.europeana.eu/api/record/ for details of the data returned in
 the record response.
