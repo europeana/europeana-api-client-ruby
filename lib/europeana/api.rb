@@ -1,12 +1,12 @@
-require 'europeana/api/version'
-require 'uri'
-require 'logger'
 require 'active_support/core_ext/object'
 require 'active_support/hash_with_indifferent_access'
+require 'europeana/api/version'
+require 'logger'
+require 'uri'
 
-##
-# Europeana REST API client
 module Europeana
+  ##
+  # Europeana REST API client
   module API
     API_VERSION = 'v2'
     URL = "http://www.europeana.eu/api/#{API_VERSION}"
@@ -27,7 +27,6 @@ module Europeana
       # retries before giving up.
       #
       # @return [Integer]
-      #
       attr_accessor :max_retries
 
       ##
@@ -36,12 +35,10 @@ module Europeana
       # The default is 10 seconds.
       #
       # @return [Integer]
-      #
       attr_accessor :retry_delay
 
       ##
       # Sets configuration values to their defaults
-      #
       def defaults!
         self.max_retries = 5
         self.retry_delay = 10
@@ -51,13 +48,12 @@ module Europeana
       # Sends a Search request to the Europeana API
       #
       # Equivalent to:
-      #   search = Europeana::Search.new(params)
+      #   search = Europeana::API::Search.new(params)
       #   search.execute
       #
       # @param [Hash] params Query parameters
       # @return [Hash] search response
-      # @see Europeana::Search#execute
-      #
+      # @see Europeana::API::Search#execute
       def search(params = {})
         Search.new(params).execute
       end
@@ -66,27 +62,27 @@ module Europeana
       # Sends a Record request to the Europeana API
       #
       # Equivalent to:
-      #   search = Europeana::Record.new(record_id, params)
-      #   record.get
+      #   record = Europeana::API::Record.new(record_id, params)
+      #   record.get(options)
       #
       # @param [String] Record ID
       # @param [Hash] params Query parameters
+      # @param [Hash] options (see Europeana::API::Record#get)
       # @return [Hash] search response
-      # @see Europeana::Record#get
-      #
-      def record(record_id, params = {})
-        Record.new(record_id, params).get
+      # @see Europeana::API::Record#get
+      def record(record_id, params = {}, options = {})
+        Record.new(record_id, params).get(options)
       end
 
       def logger
-        unless @logger
-          if defined?(Rails) && Rails.logger
-            @logger = Rails.logger
-          else
-            @logger = Logger.new(STDOUT)
-          end
+        return @logger unless @logger.nil?
+
+        @logger = case
+        when defined?(Rails) && Rails.logger
+           Rails.logger
+        else
+          Logger.new(STDOUT)
         end
-        @logger
       end
     end
 

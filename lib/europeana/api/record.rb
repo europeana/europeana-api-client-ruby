@@ -1,3 +1,5 @@
+require 'json/ld'
+
 module Europeana
   module API
     ##
@@ -62,9 +64,14 @@ module Europeana
       ##
       # Gets the URI for this Record request with parameters
       #
+      # @param [Hash{Symbol => Object}] options
+      # @option options [Boolean] :ld (false)
+      #   Request JSON-LD
       # @return [URI]
-      def request_uri
-        uri = URI.parse(Europeana::API::URL + "/record#{@id}.json")
+      def request_uri(options = {})
+        url = Europeana::API::URL + "/record#{@id}.json"
+        url << 'ld' if options[:ld]
+        uri = URI.parse(url)
         uri.query = params_with_authentication.to_query
         uri
       end
@@ -72,19 +79,24 @@ module Europeana
       ##
       # Sends a request for this record to the API
       #
-      # @return [HashWithIndifferentAccess]
+      # @param [Hash{Symbol => Object}] options
+      # @option options [Boolean] :ld (false)
+      #   Request JSON-LD
+      # @return [Hash]
       # @raise [Europeana::Errors::ResponseError] if API response could not be
       #   parsed as JSON
       # @raise [Europeana::Errors::RequestError] if API response has
       #   `success:false`
       # @raise [Europeana::Errors::RequestError] if API response has 404 status
       #   code
-      def get
-        request = Request.new(request_uri)
+      def get(options = {})
+        request = Request.new(request_uri(options))
         response = request.execute
         body = JSON.parse(response.body)
-        fail Errors::RequestError, body['error'] unless body['success']
-        HashWithIndifferentAccess.new(body)
+        if (options[:ld] && !(200..299).include?(response.code.to_i)) || (!options[:ld] && !body['success'])
+          fail Errors::RequestError, response.code
+        end
+        body
       rescue JSON::ParserError
         if response.code.to_i == 404
           # Handle HTML 404 responses on malformed record ID, emulating API's
