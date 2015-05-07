@@ -21,9 +21,9 @@ module Europeana
 
       # @return (see Net::HTTP#request)
       def execute
-        logger.debug("#{self.class} API URL: #{uri}")
+        logger.info("Request URL: #{uri}")
 
-        benchmark("#{self.class} API query", level: :debug) do
+        benchmark("Request query", level: :info) do
           http = Net::HTTP.new(uri.host, uri.port)
           request = Net::HTTP::Get.new(uri.request_uri)
           retries = Europeana::API.max_retries
