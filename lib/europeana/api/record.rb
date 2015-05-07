@@ -1,5 +1,3 @@
-require 'json/ld'
-
 module Europeana
   module API
     ##
