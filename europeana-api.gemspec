@@ -18,6 +18,8 @@ Gem::Specification.new do |spec|
   spec.test_files    = spec.files.grep(/^(test|spec|features)\//)
   spec.require_paths = ['lib']
 
+  spec.required_ruby_version = '>= 1.9.2'
+
   spec.add_dependency 'activesupport', '>= 3.0'
   spec.add_dependency 'multi_json', '~> 1.0'
 
