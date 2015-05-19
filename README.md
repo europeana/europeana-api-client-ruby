@@ -3,6 +3,12 @@
 Ruby client library for the search and retrieval of records from the [Europeana
 REST API](http://labs.europeana.eu/api/introduction/).
 
+## License
+
+Licensed under the EUPL V.1.1.
+
+For full details, see [LICENSE.md](LICENSE.md).
+
 ## Installation
 
 Add this line to your application's Gemfile:
