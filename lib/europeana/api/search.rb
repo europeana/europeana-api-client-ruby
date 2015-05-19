@@ -5,6 +5,8 @@ module Europeana
     ##
     # Interface to Europeana API's Search method
     class Search
+      autoload :Fields, 'europeana/api/search/fields'
+
       # Query params
       attr_accessor :params
 
