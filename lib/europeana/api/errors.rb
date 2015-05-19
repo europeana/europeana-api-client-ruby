@@ -14,7 +14,7 @@ module Europeana
 
   Set the key with:
 
-    Europeana.api_key = "xyz"
+    Europeana::API.api_key = "xyz"
           MSG
           super(msg)
         end

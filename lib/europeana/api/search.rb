@@ -39,7 +39,7 @@ module Europeana
       #
       # @return [Hash]
       def params_with_authentication
-        return params if params.key?(:wskey)
+        return params if params.key?(:wskey) && params[:wskey].present?
         unless Europeana::API.api_key.present?
           fail Errors::MissingAPIKeyError
         end
