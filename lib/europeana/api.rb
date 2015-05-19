@@ -37,6 +37,9 @@ module Europeana
       # @return [Integer]
       attr_accessor :retry_delay
 
+      # @return [Logger]
+      attr_writer :logger
+
       ##
       # Sets configuration values to their defaults
       def defaults!
