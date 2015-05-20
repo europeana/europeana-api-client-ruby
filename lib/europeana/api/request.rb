@@ -21,25 +21,25 @@ module Europeana
 
       # @return (see Net::HTTP#request)
       def execute
-        benchmark("Request query", level: :info) do
-          http = Net::HTTP.new(uri.host, uri.port)
-          request = Net::HTTP::Get.new(uri.request_uri)
-          retries = Europeana::API.max_retries
+        http = Net::HTTP.new(uri.host, uri.port)
+        request = Net::HTTP::Get.new(uri.request_uri)
+        retries = Europeana::API.max_retries
 
-          begin
-            attempt = Europeana::API.max_retries - retries + 1
-            logger.info("Request URL: #{uri} (attempt ##{attempt})")
+        begin
+          attempt = Europeana::API.max_retries - retries + 1
+          logger.info("[Europeana::API] Request URL: #{uri}")
+          benchmark("[Europeana::API] Request query (attempt ##{attempt})", level: :info) do
             @response = http.request(request)
-          rescue Timeout::Error, Errno::ECONNREFUSED, EOFError
-            retries -= 1
-            raise unless retries > 0
-            logger.warn("Network error; sleeping #{Europeana::API.retry_delay}s")
-            sleep Europeana::API.retry_delay
-            retry
           end
-
-          @response
+        rescue Timeout::Error, Errno::ECONNREFUSED, EOFError
+          retries -= 1
+          raise unless retries > 0
+          logger.warn("[Europeana::API] Network error; sleeping #{Europeana::API.retry_delay}s")
+          sleep Europeana::API.retry_delay
+          retry
         end
+
+        @response
       end
 
       def logger

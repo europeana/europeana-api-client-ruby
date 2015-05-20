@@ -84,9 +84,7 @@ module Europeana
         when defined?(Rails) && Rails.logger
            Rails.logger
         else
-          Logger.new(STDOUT).tap do |logger|
-            logger.progname = 'Europeana::API'
-          end
+          Logger.new(STDOUT)
         end
       end
     end
