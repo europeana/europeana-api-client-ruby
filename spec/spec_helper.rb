@@ -1,4 +1,4 @@
-require 'europeana'
+require 'europeana/api'
 require 'webmock/rspec'
 
 Dir["./spec/support/**/*.rb"].each { |f| require f }

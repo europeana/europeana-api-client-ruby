@@ -67,7 +67,7 @@ module Europeana
       #   Request JSON-LD
       # @return [URI]
       def request_uri(options = {})
-        url = Europeana::API::URL + "/record#{@id}.json"
+        url = Europeana::API.url + "/record#{@id}.json"
         url << 'ld' if options[:ld]
         uri = URI.parse(url)
         uri.query = params_with_authentication.to_query
@@ -92,7 +92,7 @@ module Europeana
         response = request.execute
         body = JSON.parse(response.body)
         if (options[:ld] && !(200..299).include?(response.code.to_i)) || (!options[:ld] && !body['success'])
-          fail Errors::RequestError, response.code
+          fail Errors::RequestError, (body.key?('error') ? body['error'] : response.code)
         end
         body
       rescue JSON::ParserError
@@ -143,7 +143,7 @@ module Europeana
       end
 
       def hierarchical_data_uri(method = :self)
-        uri = URI.parse(Europeana::API::URL + "/record#{@id}/#{method}.json")
+        uri = URI.parse(Europeana::API.url + "/record#{@id}/#{method}.json")
         uri.query = params_with_authentication.to_query
         uri
       end

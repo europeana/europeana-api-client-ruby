@@ -8,8 +8,8 @@ module Europeana
   ##
   # Europeana REST API client
   module API
-    API_VERSION = 'v2'
-    URL = "http://www.europeana.eu/api/#{API_VERSION}"
+#    API_VERSION = 'v2'
+#    URL = "http://www.europeana.eu/api/#{API_VERSION}"
 
     autoload :Errors,   'europeana/api/errors'
     autoload :Record,   'europeana/api/record'
@@ -17,9 +17,18 @@ module Europeana
     autoload :Search,   'europeana/api/search'
 
     class << self
+      ##
       # The Europeana API key, required for authentication
+      #
+      # @return [String]
       attr_accessor :api_key
 
+      ##
+      # The API's base URL
+      #
+      # @return [String]
+      attr_accessor :url
+      
       ##
       # The maximum number of retries permitted
       #
@@ -43,6 +52,7 @@ module Europeana
       ##
       # Sets configuration values to their defaults
       def defaults!
+        self.url = 'http://www.europeana.eu/api/v2'
         self.max_retries = 5
         self.retry_delay = 10
       end

@@ -28,7 +28,9 @@ module Europeana
         request = Request.new(request_uri)
         response = request.execute
         body = JSON.parse(response.body)
-        fail Errors::RequestError, body['error'] unless body['success']
+        unless body['success']
+          fail Errors::RequestError, (body.key?('error') ? body['error'] : response.code)
+        end
         HashWithIndifferentAccess.new(body)
       rescue JSON::ParserError
         raise Errors::ResponseError
@@ -51,7 +53,7 @@ module Europeana
       #
       # @return [URI]
       def request_uri
-        uri = URI.parse(Europeana::API::URL + '/search.json')
+        uri = URI.parse(Europeana::API.url + '/search.json')
         uri.query = request_uri_query
         uri
       end
