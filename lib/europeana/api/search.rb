@@ -10,6 +10,20 @@ module Europeana
       # Query params
       attr_accessor :params
 
+      class << self
+        ##
+        # Escapes Lucene syntax special characters for use in query parameters
+        #
+        # @param [String] text Text to escape
+        # @return [String] Escaped text
+        def escape(text)
+          specials = %w<\\ + - & | ! ( ) { } [ ] ^ " ~ * ? : / >
+          specials.each_with_object(text.dup) do |char, unescaped|
+            unescaped.gsub!(char, '\\\\' + char) # prepends *one* backslash
+          end
+        end
+      end
+
       ##
       # @param [Hash] params Europeana API request parameters for Search query
       def initialize(params = {})
