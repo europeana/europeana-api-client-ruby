@@ -4,9 +4,9 @@ source 'https://rubygems.org'
 gemspec
 
 group :test do
-  gem 'coveralls'
+  gem 'coveralls', require: false
 end
 
 group :test, :develop do
-  gem 'rubocop'
+  gem 'rubocop', require: false
 end
