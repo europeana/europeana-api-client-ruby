@@ -84,6 +84,14 @@ module Europeana
         subject { described_class.new(params).execute }
         it_behaves_like "search request"
       end
+
+      describe '.escape' do
+        %w<\\ + - & | ! ( ) { } [ ] ^ " ~ * ? : />.map do |char|
+          it "escapes lucene special character #{char}" do
+            expect(described_class.escape(char)).to eq("\\#{char}")
+          end
+        end
+      end
     end
   end
 end
