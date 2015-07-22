@@ -1,5 +1,7 @@
 # Europeana
 
+[![Build Status](https://travis-ci.org/rwd/europeana-api-client-ruby.svg?branch=master)](https://travis-ci.org/rwd/europeana-api-client-ruby) [![Coverage Status](https://coveralls.io/repos/rwd/europeana-api-client-ruby/badge.svg?branch=master&service=github)](https://coveralls.io/github/rwd/europeana-api-client-ruby?branch=master) [![security](https://hakiri.io/github/rwd/europeana-api-client-ruby/master.svg)](https://hakiri.io/github/rwd/europeana-api-client-ruby/master)
+
 Ruby client library for the search and retrieval of records from the [Europeana
 REST API](http://labs.europeana.eu/api/introduction/).
 
