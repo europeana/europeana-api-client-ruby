@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
   spec.email         = ['richard.doe@rwdit.net']
   spec.description   = 'Search and retrieve records from the Europeana REST API'
   spec.summary       = 'Ruby client library for the Europeana API'
-  spec.homepage      = 'https://github.com/rwd/europeana-api-client-ruby'
+  spec.homepage      = 'https://github.com/europeana/europeana-api-client-ruby'
   spec.license       = 'EUPL V.1.1'
 
   spec.files         = `git ls-files`.split($RS)
