@@ -8,9 +8,6 @@ module Europeana
   ##
   # Europeana REST API client
   module API
-#    API_VERSION = 'v2'
-#    URL = "http://www.europeana.eu/api/#{API_VERSION}"
-
     autoload :Errors,   'europeana/api/errors'
     autoload :Record,   'europeana/api/record'
     autoload :Request,  'europeana/api/request'
@@ -92,7 +89,7 @@ module Europeana
 
         @logger = case
         when defined?(Rails) && Rails.logger
-           Rails.logger
+          Rails.logger
         else
           Logger.new(STDOUT)
         end
