@@ -90,6 +90,10 @@ module Europeana
 
         AGGREGATED_FACETS = %w(DEFAULT)
 
+        MEDIA = %w(COLOURPALETTE IMAGE_ASPECTRATIO IMAGE_COLOR IMAGE_COLOUR
+                   IMAGE_GRAYSCALE IMAGE_GREYSCALE IMAGE_SIZE MEDIA MIME_TYPE
+                   SOUND_DURATION SOUND_HQ TEXT_FULLTEXT VIDEO_DURATION VIDEO_HD)
+
         ##
         # Tests whether the given field name is valid in the API search context
         #
