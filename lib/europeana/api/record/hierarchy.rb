@@ -26,11 +26,11 @@ module Europeana
             parent_response = execute_request(rel: :parent)[:parent]
             parent_node = Tree::TreeNode.new(parent_response[:id], parent_response)
 
-            execute_request(rel: "preceeding-siblings")["preceeding-siblings"].each do |sibling|
+            execute_request(rel: 'preceeding-siblings')['preceeding-siblings'].each do |sibling|
               parent_node << Tree::TreeNode.new(sibling[:id], sibling)
             end
             parent_node << self
-            execute_request(rel: "following-siblings")["following-siblings"].each do |sibling|
+            execute_request(rel: 'following-siblings')['following-siblings'].each do |sibling|
               parent_node << Tree::TreeNode.new(sibling[:id], sibling)
             end
           end
