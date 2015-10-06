@@ -8,10 +8,11 @@ module Europeana
   ##
   # Europeana REST API client
   module API
-    autoload :Errors,   'europeana/api/errors'
-    autoload :Record,   'europeana/api/record'
-    autoload :Request,  'europeana/api/request'
-    autoload :Search,   'europeana/api/search'
+    autoload :Errors, 'europeana/api/errors'
+    autoload :Record, 'europeana/api/record'
+    autoload :Request, 'europeana/api/request'
+    autoload :Requestable, 'europeana/api/requestable'
+    autoload :Search, 'europeana/api/search'
 
     class << self
       ##
