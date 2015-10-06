@@ -1,6 +1,6 @@
 # Europeana
 
-[![Build Status](https://travis-ci.org/rwd/europeana-api-client-ruby.svg?branch=master)](https://travis-ci.org/rwd/europeana-api-client-ruby) [![Coverage Status](https://coveralls.io/repos/rwd/europeana-api-client-ruby/badge.svg?branch=master&service=github)](https://coveralls.io/github/rwd/europeana-api-client-ruby?branch=master) [![security](https://hakiri.io/github/rwd/europeana-api-client-ruby/master.svg)](https://hakiri.io/github/rwd/europeana-api-client-ruby/master)
+[![Build Status](https://travis-ci.org/europeana/europeana-api-client-ruby.svg?branch=master)](https://travis-ci.org/europeana/europeana-api-client-ruby) [![Coverage Status](https://coveralls.io/repos/europeana/europeana-api-client-ruby/badge.svg?branch=master&service=github)](https://coveralls.io/github/europeana/europeana-api-client-ruby?branch=master) [![security](https://hakiri.io/github/europeana/europeana-api-client-ruby/master.svg)](https://hakiri.io/github/europeana/europeana-api-client-ruby/master) [![Dependency Status](https://gemnasium.com/europeana/europeana-api-client-ruby.svg)](https://gemnasium.com/europeana/europeana-api-client-ruby)
 
 Ruby client library for the search and retrieval of records from the [Europeana
 REST API](http://labs.europeana.eu/api/introduction/).
