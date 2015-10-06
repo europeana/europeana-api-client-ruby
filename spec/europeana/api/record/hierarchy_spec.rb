@@ -1,5 +1,5 @@
 RSpec.describe Europeana::API::Record::Hierarchy do
-  let(:record) { instance_double("Europeana::API::Record", id: record_id) }
+  let(:record) { instance_double('Europeana::API::Record', id: record_id) }
 
   let(:record_id) { '/abc/1234' }
   let(:params) { { callback: 'doSomething();' } }

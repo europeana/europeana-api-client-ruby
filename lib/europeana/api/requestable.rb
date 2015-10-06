@@ -45,9 +45,10 @@ module Europeana
       # Parses a JSON response from the API
       #
       # @param response (see Net::HTTP#request)
-      # @param options [Hash] Options used by including module implementation
+      # @param options [Hash] Options used by including class's implementation
+      #   of this method
       # @return [HashWithIndifferentAccess] Parsed body of API response
-      def parse_response(response, options = {})
+      def parse_response(response, _options = {})
         JSON.parse(response.body).with_indifferent_access
       end
 

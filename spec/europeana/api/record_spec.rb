@@ -83,7 +83,7 @@ RSpec.describe Europeana::API::Record do
     end
 
     it 'validates param names' do
-      expect { subject.params = { :invalid => 'parameter' } }.to raise_error(/Unknown key: :?invalid/)
+      expect { subject.params = { invalid: 'parameter' } }.to raise_error(/Unknown key: :?invalid/)
     end
   end
 
@@ -92,7 +92,7 @@ RSpec.describe Europeana::API::Record do
 
     context 'with API key' do
       it 'adds API key to params' do
-        expect(subject.params_with_authentication).to eq(params.merge(:wskey => api_key))
+        expect(subject.params_with_authentication).to eq(params.merge(wskey: api_key))
       end
     end
 
