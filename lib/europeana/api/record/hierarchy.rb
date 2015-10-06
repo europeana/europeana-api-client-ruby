@@ -35,7 +35,7 @@ module Europeana
           parent_id.present?
         end
 
-        def parent
+        def parent(_options = {})
           @parent ||= has_parent? ? self.class.new(parent_id) : nil
         end
 
@@ -48,12 +48,12 @@ module Europeana
         end
 
         def preceding_siblings(options = {})
-          @preceding_siblings ||= has_parent? ? fetch_group('preceeding-siblings') : []
+          @preceding_siblings ||= has_parent? ? fetch_group('preceeding-siblings', options) : []
         end
         alias_method :preceeding_siblings, :preceding_siblings
 
         def following_siblings(options = {})
-          @following_siblings ||= has_parent? ? fetch_group('following-siblings') : []
+          @following_siblings ||= has_parent? ? fetch_group('following-siblings', options) : []
         end
 
         # @param relation [String,Symbol] Relation to retrieve: 
