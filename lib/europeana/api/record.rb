@@ -91,7 +91,7 @@ module Europeana
       end
 
       def hierarchy
-        @hierarchy ||= Hierarchy.new(self)
+        @hierarchy ||= Hierarchy.new(@id)
       end
     end
   end

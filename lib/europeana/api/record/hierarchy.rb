@@ -1,44 +1,60 @@
-require 'rubytree'
-
 module Europeana
   module API
     class Record
       ##
       # Retrieve record hierarchies over the Europeana API
-      class Hierarchy < Tree::TreeNode
+      class Hierarchy < HashWithIndifferentAccess
         include Requestable
 
-        attr_reader :record
+        attr_reader :record_id
 
         ##
         # @param record [Europeana::API::Record]
-        def initialize(record)
-          @record = record
-          super(record.id, execute_request[:self])
-          fetch_family
+        def initialize(record_id_or_hash)
+          case record_id_or_hash
+          when String
+            @record_id = record_id_or_hash
+            super(execute_request[:self])
+          when Hash
+            @record_id = record_id_or_hash[:id]
+            super(record_id_or_hash)
+          else
+            fail ArgumentError, "Expected String or Hash, got #{record_id_or_hash.class}"
+          end
         end
 
-        ##
-        # Retrieves parent, children and siblings of this node
-        def fetch_family
-          unless content[:parent].blank?
-            parent_response = execute_request(rel: :parent)[:parent]
-            parent_node = Tree::TreeNode.new(parent_response[:id], parent_response)
+        def parent_id
+          fetch(:parent, nil)
+        end
 
-            execute_request(rel: 'preceeding-siblings')['preceeding-siblings'].each do |sibling|
-              parent_node << Tree::TreeNode.new(sibling[:id], sibling)
-            end
-            parent_node << self
-            execute_request(rel: 'following-siblings')['following-siblings'].each do |sibling|
-              parent_node << Tree::TreeNode.new(sibling[:id], sibling)
-            end
-          end
+        def has_parent?
+          parent_id.present?
+        end
 
-          if content[:hasChildren]
-            children_response = execute_request(rel: :children)[:children]
-            children_response.each do |child|
-              self << Tree::TreeNode.new(child[:id], child)
-            end
+        def parent
+          @parent ||= has_parent? ? self.class.new(parent_id) : nil
+        end
+
+        def has_children?
+          fetch(:hasChildren, false)
+        end
+
+        def children
+          @children ||= has_children? ? fetch_group(:children) : []
+        end
+
+        def preceding_siblings
+          @preceding_siblings ||= has_parent? ? fetch_group('preceeding-siblings') : []
+        end
+        alias_method :preceeding_siblings, :preceding_siblings
+
+        def following_siblings
+          @following_siblings ||= has_parent? ? fetch_group('following-siblings') : []
+        end
+
+        def fetch_group(rel)
+          execute_request(rel: rel)[rel].map do |sibling|
+            self.class.new(sibling)
           end
         end
 
@@ -53,7 +69,7 @@ module Europeana
         def request_url(options = {})
           options.reverse_merge!(rel: :self)
           options.assert_valid_keys(:rel)
-          Europeana::API.url + "/record#{@record.id}/#{options[:rel]}.json"
+          Europeana::API.url + "/record#{@record_id}/#{options[:rel]}.json"
         end
 
         ##
@@ -72,7 +88,7 @@ module Europeana
           if response.code.to_i == 404
             # Handle HTML 404 responses on malformed record ID, emulating API's
             # JSON response.
-            raise Errors::RequestError, "Invalid record identifier: #{@record.id}"
+            raise Errors::RequestError, "Invalid record identifier: #{@record_id}"
           else
             raise
           end
