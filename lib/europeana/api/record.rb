@@ -58,6 +58,7 @@ module Europeana
       #   Request JSON-LD
       # @return [String]
       def request_url(options = {})
+        options.assert_valid_keys(:ld)
         (Europeana::API.url + "/record#{@id}.json").tap do |url|
           url << 'ld' if options[:ld]
         end

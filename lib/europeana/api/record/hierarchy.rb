@@ -1,5 +1,4 @@
 require 'rubytree'
-require 'active_support/core_ext/object/blank'
 
 module Europeana
   module API
@@ -53,6 +52,7 @@ module Europeana
         # @return [String]
         def request_url(options = {})
           options.reverse_merge!(rel: :self)
+          options.assert_valid_keys(:rel)
           Europeana::API.url + "/record#{@record.id}/#{options[:rel]}.json"
         end
 
