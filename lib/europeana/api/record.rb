@@ -58,6 +58,7 @@ module Europeana
       #   Request JSON-LD
       # @return [String]
       def request_url(options = {})
+        options.assert_valid_keys(:ld)
         (Europeana::API.url + "/record#{@id}.json").tap do |url|
           url << 'ld' if options[:ld]
         end
@@ -90,7 +91,7 @@ module Europeana
       end
 
       def hierarchy
-        @hierarchy ||= Hierarchy.new(self)
+        @hierarchy ||= Hierarchy.new(@id)
       end
     end
   end

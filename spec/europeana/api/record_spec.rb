@@ -130,7 +130,7 @@ RSpec.describe Europeana::API::Record do
     subject { record.hierarchy }
     it { is_expected.to be_a(Europeana::API::Record::Hierarchy) }
     it 'should have assigned record attr' do
-      expect(subject.record).to eq(record)
+      expect(subject.record_id).to eq(record_id)
     end
     it 'should fetch record hierarchy' do
       subject
