@@ -48,12 +48,18 @@ module Europeana
       # @return [Logger]
       attr_writer :logger
 
+      attr_accessor :cache_store
+
+      attr_accessor :cache_expires_in
+
       ##
       # Sets configuration values to their defaults
       def defaults!
         self.url = 'http://www.europeana.eu/api/v2'
         self.max_retries = 5
         self.retry_delay = 10
+        self.cache_store = ActiveSupport::Cache::NullStore.new
+        self.cache_expires_in = 24.hours
       end
 
       ##
