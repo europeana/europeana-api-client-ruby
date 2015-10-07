@@ -100,7 +100,13 @@ module Europeana
         # @see Requestable#parse_response
         def parse_response(response, options = {})
           super.tap do |body|
-            fail Errors::RequestError, body[:message] unless body[:success]
+            unless body[:success]
+              if body[:error].match(/Invalid record identifier/)
+                {}
+              else
+                fail Errors::RequestError, body[:message]
+              end
+            end
           end
         rescue JSON::ParserError
           if response.code.to_i == 404
