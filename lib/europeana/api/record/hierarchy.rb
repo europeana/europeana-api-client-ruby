@@ -10,7 +10,7 @@ module Europeana
 
         ##
         # @param record [Europeana::API::Record]
-        def initialize(record_id_or_hash, params = {})
+        def initialize(record_id_or_hash)
           @params = {}
 
           case record_id_or_hash
@@ -56,9 +56,9 @@ module Europeana
           @following_siblings ||= has_parent? ? fetch_group('following-siblings', options) : []
         end
 
-        # @param relation [String,Symbol] Relation to retrieve: 
+        # @param relation [String,Symbol] Relation to retrieve:
         #   {"preceeding-siblings"}, {"following-siblings"}, {:children}
-        # @param [Hash{Symbol => Object}] options
+        # @param params [Hash{Symbol => Object}] Additional Hierarchy API query params
         # @option options [Fixnum] :offset First relative to retrieve
         # @option options [Fixnum] :limit Number of relatives to retrieve
         def fetch_group(relation, params = {})
@@ -79,7 +79,7 @@ module Europeana
         ##
         # Gets the URL for a hierarchy request
         #
-        # @param [Hash{Symbol => Object}] options
+        # @param options [Hash{Symbol => Object}]
         # @option options [Symbol,String] :relation (:self)
         #   Relation to retrieve: {:self}, {:parent}, {"preceeding-siblings"},
         #   {"following-siblings"}, {:children}
@@ -116,12 +116,10 @@ module Europeana
           options.reverse_merge!(family: true)
           return super(options) unless options.delete(:family)
 
-          {
-            self: super(options),
-          }.tap do |json|
+          { self: super(options) }.tap do |json|
             json[:parent] = @parent.as_json(family: false) unless @parent.nil?
             [:children, :following_siblings, :preceding_siblings].each do |relation|
-              relatives = self.instance_variable_get(:"@#{relation}")
+              relatives = instance_variable_get(:"@#{relation}")
               json[relation] = relatives.map { |relative| relative.as_json(family: false) } unless relatives.blank?
             end
           end

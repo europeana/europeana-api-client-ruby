@@ -45,7 +45,7 @@ module Europeana
       end
 
       def cache_key
-        "Europeana/API/#{uri.to_s}"
+        "Europeana/API/#{uri}"
       end
 
       def cached
