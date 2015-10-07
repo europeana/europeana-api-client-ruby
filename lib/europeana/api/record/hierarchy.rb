@@ -101,7 +101,7 @@ module Europeana
         def parse_response(response, options = {})
           super.tap do |body|
             unless body[:success]
-              if body[:error].match(/Invalid record identifier/)
+              if body[:error] && body[:error].match(/Invalid record identifier/)
                 {}
               else
                 fail Errors::RequestError, body[:message]
