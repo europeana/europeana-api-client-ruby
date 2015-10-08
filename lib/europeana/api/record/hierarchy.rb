@@ -65,7 +65,7 @@ module Europeana
           @params = params
           execute_request(relation: relation)[relation].map do |relative|
             self.class.new(relative)
-          end
+          end.sort_by { |relative| relative[:index] }
         end
 
         def with_family
