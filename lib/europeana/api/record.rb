@@ -19,8 +19,8 @@ module Europeana
       # @param [String] id Europeana ID of the record
       # @param [Hash] params Request parameters
       def initialize(id, params = {})
-        self.id = id
-        self.params = params
+        @id = id
+        @params = params
       end
 
       ##
@@ -91,7 +91,7 @@ module Europeana
       end
 
       def hierarchy
-        @hierarchy ||= Hierarchy.new(@id)
+        @hierarchy ||= Hierarchy.new(id)
       end
     end
   end

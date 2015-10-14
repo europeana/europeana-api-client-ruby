@@ -48,8 +48,8 @@ module Europeana
       # @see Requestable#parse_response
       def parse_response(response, _options = {})
         super.tap do |body|
-          unless body['success']
-            fail Errors::RequestError, (body.key?('error') ? body['error'] : response.code)
+          unless body[:success]
+            fail Errors::RequestError, (body.key?(:error) ? body[:error] : response.code)
           end
         end
       end
