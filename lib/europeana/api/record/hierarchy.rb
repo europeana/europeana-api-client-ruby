@@ -11,7 +11,6 @@ module Europeana
         autoload :Parent, 'europeana/api/record/hierarchy/parent'
         autoload :PrecedingSiblings, 'europeana/api/record/hierarchy/preceding_siblings'
         autoload :Self, 'europeana/api/record/hierarchy/self'
-        # etc
 
         def initialize(id)
           @id = id
