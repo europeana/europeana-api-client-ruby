@@ -17,6 +17,7 @@ module Europeana
         # @param [String] text Text to escape
         # @return [String] Escaped text
         def escape(text)
+          fail ArgumentError, "Expected String, got #{text.class}" unless text.is_a?(String)
           specials = %w<\\ + - & | ! ( ) { } [ ] ^ " ~ * ? : / >
           specials.each_with_object(text.dup) do |char, unescaped|
             unescaped.gsub!(char, '\\\\' + char) # prepends *one* backslash
@@ -48,8 +49,8 @@ module Europeana
       # @see Requestable#parse_response
       def parse_response(response, _options = {})
         super.tap do |body|
-          unless body['success']
-            fail Errors::RequestError, (body.key?('error') ? body['error'] : response.code)
+          unless body[:success]
+            fail Errors::RequestError, (body.key?(:error) ? body[:error] : response.code)
           end
         end
       end

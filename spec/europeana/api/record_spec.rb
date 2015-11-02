@@ -129,12 +129,5 @@ RSpec.describe Europeana::API::Record do
     let(:record) { described_class.new(record_id, params) }
     subject { record.hierarchy }
     it { is_expected.to be_a(Europeana::API::Record::Hierarchy) }
-    it 'should have assigned record attr' do
-      expect(subject.record_id).to eq(record_id)
-    end
-    it 'should fetch record hierarchy' do
-      subject
-      expect(a_request(:get, %r{www.europeana.eu/api/v2/record#{record_id}/self.json})).to have_been_made.once
-    end
   end
 end

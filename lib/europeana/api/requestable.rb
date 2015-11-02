@@ -33,10 +33,23 @@ module Europeana
       # @raise [Europeana::Errors::ResponseError] if API response could not be
       #   parsed as JSON
       def execute_request(options = {})
-        response = Request.new(request_uri(options)).execute
-        parse_response(response, options)
+        uri = request_uri(options)
+        cache_response_body(uri) do
+          response = Request.new(uri).execute
+          parse_response(response, options)
+        end
       rescue JSON::ParserError
         raise Errors::ResponseError
+      end
+
+      def cache_key(uri)
+        "Europeana/API/#{uri}"
+      end
+
+      def cache_response_body(uri)
+        Europeana::API.cache_store.fetch(cache_key(uri), expires_in: Europeana::API.cache_expires_in) do
+          yield
+        end
       end
 
       ##
