@@ -15,7 +15,7 @@ module Europeana
           end
 
           def parse_response(response, options = {})
-            super.slice(:self, :children, :parent, 'preceeding-siblings', 'following-siblings', 'ancestors')
+            super.slice(:self, :children, :parent, 'preceding-siblings', 'preceeding-siblings', 'following-siblings', 'ancestors')
           end
 
           def request_url(_options = {})
