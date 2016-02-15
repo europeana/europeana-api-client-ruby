@@ -50,7 +50,12 @@ module Europeana
       def parse_response(response, _options = {})
         super.tap do |body|
           unless body[:success]
-            fail Errors::RequestError, (body.key?(:error) ? body[:error] : response.code)
+            if body.key?(:error) && body[:error] =~ /1000 search results/
+              klass = Errors::Request::PaginationError
+            else
+              klass = Errors::RequestError
+            end
+            fail klass, (body.key?(:error) ? body[:error] : response.code)
           end
         end
       end
