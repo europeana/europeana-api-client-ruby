@@ -3,6 +3,8 @@ module Europeana
     module Errors
       ##
       # Raised if API requests are attempted without the API key having been set.
+      #
+      # @todo Use one-line error messages (in backwards-incompatible version)
       class MissingAPIKeyError < StandardError
         def initialize(msg = nil)
           msg ||= <<-MSG
@@ -44,6 +46,14 @@ module Europeana
   Unable to parse the response from the Europeana API.
           MSG
           super(msg)
+        end
+      end
+
+      module Request
+        ##
+        # Raised if the API response indicates invalid pagination params in
+        # the request.
+        class PaginationError < StandardError
         end
       end
     end
