@@ -51,10 +51,10 @@ module Europeana
         super.tap do |body|
           unless body[:success]
             klass = if body.key?(:error) && body[:error] =~ /1000 search results/
-              Errors::Request::PaginationError
-            else
-              Errors::RequestError
-            end
+                      Errors::Request::PaginationError
+                    else
+                      Errors::RequestError
+                    end
             fail klass, (body.key?(:error) ? body[:error] : response.code)
           end
         end
