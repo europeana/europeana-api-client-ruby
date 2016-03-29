@@ -12,7 +12,7 @@ module Europeana
 
     describe '.url' do
       it 'defaults to the live API URL' do
-        expect(subject.url).to eq('http://www.europeana.eu/api/v2')
+        expect(subject.url).to eq('https://www.europeana.eu/api/v2')
       end
     end
 
@@ -70,7 +70,7 @@ module Europeana
         expect { described_class.defaults! }.
           to change { described_class.url }.
           from('http://www.example.com/v2').
-          to('http://www.europeana.eu/api/v2')
+          to('https://www.europeana.eu/api/v2')
       end
 
       it "sets retry delay to its default" do

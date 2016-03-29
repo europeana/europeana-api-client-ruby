@@ -22,6 +22,7 @@ module Europeana
       # @return (see Net::HTTP#request)
       def execute
         http = Net::HTTP.new(uri.host, uri.port)
+        http.use_ssl = (uri.scheme == 'https')
         request = Net::HTTP::Get.new(uri.request_uri)
         retries = Europeana::API.max_retries
 

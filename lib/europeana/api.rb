@@ -58,7 +58,7 @@ module Europeana
       ##
       # Sets configuration values to their defaults
       def defaults!
-        self.url = 'http://www.europeana.eu/api/v2'
+        self.url = 'https://www.europeana.eu/api/v2'
         self.max_retries = 5
         self.retry_delay = 10
         self.cache_store = ActiveSupport::Cache::NullStore.new

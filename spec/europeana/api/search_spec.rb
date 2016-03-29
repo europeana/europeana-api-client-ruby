@@ -57,7 +57,7 @@ module Europeana
 
         it "includes request params" do
           subject.params[:query] = 'paris'
-          expect(subject.request_uri.to_s).to eq("http://www.europeana.eu/api/v2/search.json?query=paris&wskey=#{api_key}")
+          expect(subject.request_uri.to_s).to eq("https://www.europeana.eu/api/v2/search.json?query=paris&wskey=#{api_key}")
         end
       end
 

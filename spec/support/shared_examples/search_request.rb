@@ -1,6 +1,6 @@
 shared_examples 'search request' do
   before(:each) do
-    stub_request(:get, %r{www.europeana.eu/api/v2/search.json}).
+    stub_request(:get, %r{https://www.europeana.eu/api/v2/search.json}).
       to_return(body: '{"success":true}')
   end
 
@@ -16,14 +16,14 @@ shared_examples 'search request' do
 
     it 'sends a Search request to the API' do
       subject
-      expect(a_request(:get, %r{www.europeana.eu/api/v2/search.json})).
+      expect(a_request(:get, %r{https://www.europeana.eu/api/v2/search.json})).
         to have_been_made.once
     end
 
     context 'without query' do
       it 'sends without query' do
         subject
-        expect(a_request(:get, %r{www.europeana.eu/api/v2/search.json})).
+        expect(a_request(:get, %r{https://www.europeana.eu/api/v2/search.json})).
           to have_been_made.once
       end
     end
@@ -33,7 +33,7 @@ shared_examples 'search request' do
 
       it 'sends query' do
         subject
-        expect(a_request(:get, 'www.europeana.eu/api/v2/search.json').
+        expect(a_request(:get, 'https://www.europeana.eu/api/v2/search.json').
           with(query: hash_including({'query' => params[:query]}))).
           to have_been_made.once
       end
