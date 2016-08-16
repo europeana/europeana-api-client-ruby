@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'spec_helper'
 
 module Europeana
@@ -5,7 +6,7 @@ module Europeana
     module Errors
       describe MissingAPIKeyError do
         subject { described_class.new }
-        
+
         it 'has an informative message' do
           expect(subject.message).to match('Missing API key.')
         end

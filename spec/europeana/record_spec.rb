@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 RSpec.describe Europeana::Record do
   let(:api_key) { 'xyz' }
   let(:record_id) { '/abc/1234' }
@@ -7,9 +8,9 @@ RSpec.describe Europeana::Record do
     Europeana::API.api_key = api_key
   end
 
-  describe ".search" do
+  describe '.search' do
     subject { described_class.search(params) }
-    it_behaves_like "search request"
+    it_behaves_like 'search request'
   end
 
   describe '#new' do

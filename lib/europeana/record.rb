@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module Europeana
   ##
   # Interface to the Europeana API Record method
@@ -90,7 +91,7 @@ module Europeana
     # @see Requestable#parse_response
     def parse_response(response, options = {})
       super.tap do |body|
-        if (options[:ld] && !(200..299).include?(response.code.to_i)) || (!options[:ld] && !body[:success])
+        if (options[:ld] && !(200..299).cover?(response.code.to_i)) || (!options[:ld] && !body[:success])
           fail API::Errors::RequestError, (body.key?(:error) ? body[:error] : response.code)
         end
       end

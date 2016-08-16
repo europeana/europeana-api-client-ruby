@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 RSpec.describe Europeana::Record::Hierarchy do
   let(:record_id) { '/abc/1234' }
   let(:params) { { callback: 'doSomething();' } }

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module Europeana
   module API
     ##
@@ -68,14 +69,11 @@ module Europeana
       #
       # @return [String]
       def request_uri_query
-        ''.tap do |uri_query|
-          params_with_authentication.each_pair do |name, value|
-            [value].flatten.each do |v|
-              uri_query << '&' unless uri_query.blank?
-              uri_query << CGI.escape(name.to_s) + '=' + CGI.escape(v.to_s)
-            end
+        params_with_authentication.each_with_object([]) do |(name, values), queries|
+          [values].flatten.compact.each do |v|
+            queries << CGI.escape(name.to_s) + '=' + CGI.escape(v.to_s)
           end
-        end
+        end.join('&')
       end
 
       ##

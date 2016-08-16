@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'active_support/cache'
 require 'active_support/core_ext/object'
 require 'active_support/core_ext/hash/indifferent_access'
@@ -30,7 +31,7 @@ module Europeana
       #
       # @return [String]
       attr_accessor :url
-      
+
       ##
       # The maximum number of retries permitted
       #
@@ -86,6 +87,6 @@ module Europeana
       end
     end
 
-    self.defaults!
+    defaults!
   end
 end

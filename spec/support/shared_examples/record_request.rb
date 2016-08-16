@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 shared_examples 'record request' do
   let(:api_record_endpoint) { %r{www.europeana.eu/api/v2/record#{record_id}\.json} }
   let(:api_key) { 'xyz' }

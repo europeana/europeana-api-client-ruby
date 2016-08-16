@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 shared_examples 'search request' do
   before(:each) do
     stub_request(:get, %r{https://www.europeana.eu/api/v2/search.json}).
@@ -34,7 +35,7 @@ shared_examples 'search request' do
       it 'sends query' do
         subject
         expect(a_request(:get, 'https://www.europeana.eu/api/v2/search.json').
-          with(query: hash_including({'query' => params[:query]}))).
+          with(query: hash_including('query' => params[:query]))).
           to have_been_made.once
       end
     end
