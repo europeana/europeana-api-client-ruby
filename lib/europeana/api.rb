@@ -9,14 +9,15 @@ require 'logger'
 require 'uri'
 
 module Europeana
+  autoload :Record, 'europeana/record'
+  autoload :Search, 'europeana/search'
+
   ##
   # Europeana REST API client
   module API
     autoload :Errors, 'europeana/api/errors'
-    autoload :Record, 'europeana/api/record'
     autoload :Request, 'europeana/api/request'
     autoload :Requestable, 'europeana/api/requestable'
-    autoload :Search, 'europeana/api/search'
 
     class << self
       ##
@@ -96,14 +97,7 @@ module Europeana
       end
 
       def logger
-        return @logger unless @logger.nil?
-
-        @logger = case
-        when defined?(Rails) && Rails.logger
-          Rails.logger
-        else
-          Logger.new(STDOUT)
-        end
+        @logger ||= (defined?(Rails) && Rails.logger) ? Rails.logger : Logger.new(STDOUT)
       end
     end
 

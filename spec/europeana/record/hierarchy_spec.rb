@@ -1,4 +1,4 @@
-RSpec.describe Europeana::API::Record::Hierarchy do
+RSpec.describe Europeana::Record::Hierarchy do
   let(:record_id) { '/abc/1234' }
   let(:params) { { callback: 'doSomething();' } }
 

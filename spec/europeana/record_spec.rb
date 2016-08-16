@@ -1,4 +1,4 @@
-RSpec.describe Europeana::API::Record do
+RSpec.describe Europeana::Record do
   let(:api_key) { 'xyz' }
   let(:record_id) { '/abc/1234' }
   let(:params) { { callback: 'doSomething();' } }
@@ -128,6 +128,6 @@ RSpec.describe Europeana::API::Record do
   describe '#hierarchy' do
     let(:record) { described_class.new(record_id, params) }
     subject { record.hierarchy }
-    it { is_expected.to be_a(Europeana::API::Record::Hierarchy) }
+    it { is_expected.to be_a(Europeana::Record::Hierarchy) }
   end
 end
