@@ -36,7 +36,7 @@ module Europeana
       def execute_request(options = {})
         uri = request_uri(options)
         cache_response_body(uri) do
-          response = Client.request(url: uri)
+          response = Client.get(uri)
           parse_response(response, options)
         end
       rescue JSON::ParserError

@@ -7,14 +7,16 @@ module Europeana
     # The API client responsible for handling requests and responses
     class Client
       class << self
-        ##
-        # Send an HTTP request to a URL
-        #
-        # @param url [String,URI] URL for the request
-        # @return [Faraday::Response] API response
-        # @todo validate `method`
-        def request(url:, method: :get, params: nil, headers: nil)
-          connection.send(method, url, params, headers)
+        def get(url, params = {}, headers = nil)
+          connection.get(url, with_authentication(params), headers)
+        end
+
+        def with_authentication(params)
+          return params if params.key?(:wskey) && params[:wskey].present?
+          unless Europeana::API.api_key.present?
+            fail Errors::MissingAPIKeyError
+          end
+          params.merge(wskey: Europeana::API.api_key)
         end
 
         ##

@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 require 'active_support/core_ext/class/attribute'
+require 'active_support/core_ext/module/delegation'
 
 module Europeana
   ##
@@ -7,16 +8,13 @@ module Europeana
   class Resource
     include API::Requestable
 
+    class << self
+      delegate :get, to: Europeana::API::Client
+    end
+
     ##
     # [String] Base URL for all API requests for a class of resources
     class_attribute :base_url
     self.base_url = 'https://www.europeana.eu/api'
-
-    class << self
-      def request(url:, params: {})
-        params.reverse_merge!(wskey: Europeana::API.api_key)
-        API::Client.request(url: url, params: params)
-      end
-    end
   end
 end

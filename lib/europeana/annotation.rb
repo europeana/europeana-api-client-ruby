@@ -8,7 +8,7 @@ module Europeana
 
     class << self
       def fetch(provider:, id:)
-        request(url: resource_url(provider: provider, id: id))
+        get(resource_url(provider: provider, id: id))
       end
 
       def resource_url(**args)

@@ -1,39 +1,37 @@
 RSpec.describe Europeana::API::Client do
-  describe '.request' do
+  describe '.get' do
     context 'without URL' do
       it 'fails' do
-        expect { described_class.request }.to raise_error(ArgumentError)
+        expect { described_class.get }.to raise_error(ArgumentError)
       end
     end
 
     context 'with URL' do
-      context 'without method' do
+      context 'with GET method' do
         it 'sends an HTTP GET request to it' do
           url = 'http://www.example.com/'
-          stub_request(:get, url)
-          described_class.request(url: url)
-          expect(a_request(:get, url)).to have_been_made.once
+          stub_request(:get, Regexp.new(url))
+          described_class.get(url)
+          expect(a_request(:get, Regexp.new(url))).to have_been_made.once
         end
       end
 
-      context 'with method' do
-        it 'sends that HTTP verb request to it' do
+      context 'with POST method' do
+        it 'sends an HTTP POST request to it' do
           url = 'http://www.example.com/'
-          stub_request(:put, url)
-          described_class.request(url: url, method: :put)
-          expect(a_request(:put, url)).to have_been_made.once
+          stub_request(:put, Regexp.new(url))
+          described_class.post(url, :put)
+          expect(a_request(:put, Regexp.new(url))).to have_been_made.once
         end
       end
 
       context 'when request fails' do
         it 'retries up to 5 times' do
           url = 'http://www.example.com/'
-          stub_request(:get, url).
-            to_timeout.times(3).then.
-            to_return({body: 'OK'})
+          stub_request(:get, Regexp.new(url)).to_timeout.times(3).to_return({body: 'OK'})
 
-          described_class.request(url: url)
-          expect(a_request(:get, url)).to have_been_made.times(4)
+          described_class.get(url)
+          expect(a_request(:get, Regexp.new(url))).to have_been_made.times(4)
         end
       end
     end
