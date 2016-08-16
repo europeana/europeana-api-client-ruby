@@ -22,6 +22,7 @@ Gem::Specification.new do |spec|
 
   spec.add_dependency 'activesupport', '>= 4.0', '< 5.0'
   spec.add_dependency 'faraday', '~> 0.9'
+  spec.add_dependency 'faraday_middleware'
   spec.add_dependency 'multi_json', '~> 1.0'
 
   spec.add_development_dependency 'bundler', '~> 1.3'

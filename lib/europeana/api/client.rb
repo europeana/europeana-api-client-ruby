@@ -1,4 +1,5 @@
 require 'faraday'
+require 'faraday_middleware'
 
 module Europeana
   module API
@@ -12,8 +13,8 @@ module Europeana
         # @param url [String,URI] URL for the request
         # @return [Faraday::Response] API response
         # @todo validate `method`
-        def request(url:, method: :get)
-          connection.send(method, url)
+        def request(url:, method: :get, params: nil, headers: nil)
+          connection.send(method, url, params, headers)
         end
 
         ##
@@ -21,6 +22,7 @@ module Europeana
         #
         # * Requests are retried 5 times at an interval of 3 seconds
         # * Requests are instrumented
+        # * JSON responses are parsed
         #
         # @return [Faraday::Connection]
         def connection
@@ -31,6 +33,7 @@ module Europeana
               conn.request :retry, max: 5, interval: 3,
                                    exceptions: [Errno::ECONNREFUSED, Errno::ETIMEDOUT, 'Timeout::Error',
                                                 Faraday::Error::TimeoutError, EOFError]
+                conn.response :json, content_type: /\bjson$/
             end
           end
         end

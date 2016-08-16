@@ -8,7 +8,7 @@ module Europeana
 
     class << self
       def fetch(provider:, id:)
-        API::Client.request(url: resource_url(provider: provider, id: id))
+        request(url: resource_url(provider: provider, id: id))
       end
 
       def resource_url(**args)

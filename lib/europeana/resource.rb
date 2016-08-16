@@ -11,5 +11,12 @@ module Europeana
     # [String] Base URL for all API requests for a class of resources
     class_attribute :base_url
     self.base_url = 'https://www.europeana.eu/api'
+
+    class << self
+      def request(url:, params: {})
+        params.reverse_merge!(wskey: Europeana::API.api_key)
+        API::Client.request(url: url, params: params)
+      end
+    end
   end
 end
