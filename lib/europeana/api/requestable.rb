@@ -21,7 +21,7 @@ module Europeana
       def params_with_authentication
         return params if params.key?(:wskey) && params[:wskey].present?
         unless Europeana::API.api_key.present?
-          fail Europeana::API::Errors::MissingAPIKeyError
+          fail Errors::MissingAPIKeyError
         end
         params.merge(wskey: Europeana::API.api_key)
       end
@@ -36,7 +36,7 @@ module Europeana
       def execute_request(options = {})
         uri = request_uri(options)
         cache_response_body(uri) do
-          response = Request.new(uri).execute
+          response = Client.request(url: uri)
           parse_response(response, options)
         end
       rescue JSON::ParserError

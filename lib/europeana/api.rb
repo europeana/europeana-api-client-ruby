@@ -10,13 +10,15 @@ require 'logger'
 require 'uri'
 
 module Europeana
+  autoload :Annotation, 'europeana/annotation'
   autoload :Record, 'europeana/record'
+  autoload :Resource, 'europeana/resource'
 
   ##
   # Europeana REST API client
   module API
+    autoload :Client, 'europeana/api/client'
     autoload :Errors, 'europeana/api/errors'
-    autoload :Request, 'europeana/api/request'
     autoload :Requestable, 'europeana/api/requestable'
 
     class << self

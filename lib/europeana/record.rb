@@ -4,11 +4,9 @@ module Europeana
   # Interface to the Europeana API Record method
   #
   # @see http://labs.europeana.eu/api/record/
-  class Record
+  class Record < Resource
     autoload :Hierarchy, 'europeana/record/hierarchy'
     autoload :Search, 'europeana/record/search'
-
-    include API::Requestable
 
     # Europeana ID of the record
     attr_reader :id
@@ -91,12 +89,12 @@ module Europeana
     # @see Requestable#parse_response
     def parse_response(response, options = {})
       super.tap do |body|
-        if (options[:ld] && !(200..299).cover?(response.code.to_i)) || (!options[:ld] && !body[:success])
-          fail API::Errors::RequestError, (body.key?(:error) ? body[:error] : response.code)
+        if (options[:ld] && !response.success?) || (!options[:ld] && !body[:success])
+          fail API::Errors::RequestError, (body.key?(:error) ? body[:error] : response.status)
         end
       end
     rescue JSON::ParserError
-      if response.code.to_i == 404
+      if response.status == 404
         # Handle HTML 404 responses on malformed record ID, emulating API's
         # JSON response.
         raise API::Errors::RequestError, "Invalid record identifier: #{@id}"

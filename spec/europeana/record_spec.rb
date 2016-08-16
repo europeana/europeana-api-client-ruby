@@ -28,6 +28,8 @@ RSpec.describe Europeana::Record do
           expect { subject }.to_not raise_error
         end
 
+        it { is_expected.to be_a(Europeana::Resource) }
+
         it 'sets id attribute' do
           expect(subject.instance_variable_get(:@id)).to eq(record_id)
         end

@@ -3,10 +3,8 @@ module Europeana
   class Record
     ##
     # Interface to Europeana API's Record search
-    class Search
+    class Search < Resource
       autoload :Fields, 'europeana/record/search/fields'
-
-      include API::Requestable
 
       # Query params
       attr_accessor :params
@@ -56,7 +54,7 @@ module Europeana
                     else
                       API::Errors::RequestError
                     end
-            fail klass, (body.key?(:error) ? body[:error] : response.code)
+            fail klass, (body.key?(:error) ? body[:error] : response.status)
           end
         end
       end

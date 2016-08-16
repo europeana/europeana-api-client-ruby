@@ -4,9 +4,7 @@ module Europeana
     class Hierarchy
       ##
       # Base class for common heirarchy API behaviour
-      class Base
-        include API::Requestable
-
+      class Base < Resource
         attr_accessor :params
 
         def initialize(id, params = {})
