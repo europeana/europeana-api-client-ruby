@@ -10,7 +10,6 @@ require 'uri'
 
 module Europeana
   autoload :Record, 'europeana/record'
-  autoload :Search, 'europeana/search'
 
   ##
   # Europeana REST API client
@@ -67,25 +66,11 @@ module Europeana
       end
 
       ##
-      # Sends a Search request to the Europeana API
-      #
-      # Equivalent to:
-      #   search = Europeana::API::Search.new(params)
-      #   search.execute
-      #
-      # @param [Hash] params Query parameters
-      # @return [Hash] search response
-      # @see Europeana::API::Search#execute
-      def search(params = {})
-        Search.new(params).execute
-      end
-
-      ##
       # Sends a Record request to the Europeana API
       #
       # Equivalent to:
-      #   record = Europeana::API::Record.new(record_id, params)
-      #   record.get(options)
+      #   record = Europeana::Record.new(record_id, params)
+      #   record.fetch(options)
       #
       # @param [String] Record ID
       # @param [Hash] params Query parameters
@@ -93,7 +78,7 @@ module Europeana
       # @return [Hash] search response
       # @see Europeana::API::Record#get
       def record(record_id, params = {}, options = {})
-        Record.new(record_id, params).get(options)
+        Record.new(record_id, params).fetch(options)
       end
 
       def logger

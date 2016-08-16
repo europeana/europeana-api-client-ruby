@@ -5,6 +5,7 @@ module Europeana
   # @see http://labs.europeana.eu/api/record/
   class Record
     autoload :Hierarchy, 'europeana/record/hierarchy'
+    autoload :Search, 'europeana/record/search'
 
     include API::Requestable
 
@@ -13,6 +14,20 @@ module Europeana
 
     # Request parameters to send to the API
     attr_reader :params
+
+    ##
+    # Sends a Search request to the Europeana API
+    #
+    # Equivalent to:
+    #   search = Europeana::Record::Search.new(params)
+    #   search.execute
+    #
+    # @param [Hash] params Query parameters
+    # @return [Hash] search response
+    # @see Europeana::API::Search#execute
+    def self.search(params = {})
+      Search.new(params).execute
+    end
 
     ##
     # @param [String] id Europeana ID of the record
@@ -63,7 +78,7 @@ module Europeana
       end
     end
 
-    alias_method :get, :execute_request
+    alias_method :fetch, :execute_request
 
     ##
     # Examines the `success` and `error` fields of the response for failure

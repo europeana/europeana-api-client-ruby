@@ -7,6 +7,11 @@ RSpec.describe Europeana::Record do
     Europeana::API.api_key = api_key
   end
 
+  describe ".search" do
+    subject { described_class.search(params) }
+    it_behaves_like "search request"
+  end
+
   describe '#new' do
     context 'without record ID' do
       it 'raises error' do
@@ -120,8 +125,8 @@ RSpec.describe Europeana::Record do
     end
   end
 
-  describe '#get' do
-    subject { described_class.new(record_id, params).get }
+  describe '#fetch' do
+    subject { described_class.new(record_id, params).fetch }
     it_behaves_like 'record request'
   end
 

@@ -84,11 +84,6 @@ module Europeana
       end
     end
 
-    describe ".search" do
-      subject { described_class.search(params) }
-      it_behaves_like "search request"
-    end
-
     describe ".record" do
       subject { described_class.record(record_id, params) }
       it_behaves_like "record request"

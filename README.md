@@ -44,10 +44,10 @@ require 'europeana/api'
 Europeana::API.api_key = 'xyz'
 ```
 
-### Search
+### Record search
 
 ```ruby
-search = Europeana::API.search(query: '"first world war"') # => { "success" => true, "items" => [ ... ], "totalResults" => 1234, ... }
+search = Europeana::Record.search(query: '"first world war"') # => { "success" => true, "items" => [ ... ], "totalResults" => 1234, ... }
 search['items'] # => [ item1, item2, ... ]
 search['totalResults'] # => 1234
 ```
@@ -55,10 +55,10 @@ search['totalResults'] # => 1234
 See http://labs.europeana.eu/api/search/ for details of the data returned in
 the search response.
 
-### Record
+### Record retrieval
 
 ```ruby
-record = Europeana::API.record('/abc/1234') # => { "success" => true, "object" => { ... }, ... }
+record = Europeana::Record.fetch('/abc/1234') # => { "success" => true, "object" => { ... }, ... }
 record['object'] # => { "title" => "...", "proxies" => [ ... ], "aggregations" => [ ... ], ... }
 ```
 

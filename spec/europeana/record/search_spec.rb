@@ -1,6 +1,6 @@
 require 'active_support/core_ext/hash'
 
-describe Europeana::Search do
+describe Europeana::Record::Search do
   let(:api_key) { 'xyz' }
   let(:params) {
     HashWithIndifferentAccess.new({
