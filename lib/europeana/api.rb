@@ -1,11 +1,14 @@
 # frozen_string_literal: true
 require 'active_support/cache'
-require 'active_support/core_ext/object'
+require 'active_support/core_ext/class/attribute'
 require 'active_support/core_ext/hash/indifferent_access'
 require 'active_support/core_ext/hash/slice'
+require 'active_support/core_ext/module/delegation'
+require 'active_support/core_ext/object'
 require 'active_support/hash_with_indifferent_access'
 require 'active_support/inflector/methods'
 require 'europeana/api/version'
+require 'europeana/api/logger'
 require 'logger'
 require 'uri'
 
@@ -15,11 +18,11 @@ module Europeana
   autoload :Resource, 'europeana/resource'
 
   ##
-  # Europeana REST API client
+  # Interface to Europeana's RESTful API(s)
   module API
+    autoload :FaradayMiddleware, 'europeana/api/faraday_middleware'
     autoload :Client, 'europeana/api/client'
     autoload :Errors, 'europeana/api/errors'
-    autoload :Requestable, 'europeana/api/requestable'
 
     class << self
       ##
@@ -61,9 +64,9 @@ module Europeana
       ##
       # Sets configuration values to their defaults
       def defaults!
-        self.url = 'https://www.europeana.eu/api/v2'
+        self.url = 'https://www.europeana.eu/api'
         self.max_retries = 5
-        self.retry_delay = 10
+        self.retry_delay = 3
         self.cache_store = ActiveSupport::Cache::NullStore.new
         self.cache_expires_in = 24.hours
       end
