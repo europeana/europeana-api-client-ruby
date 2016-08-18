@@ -7,14 +7,6 @@ module Europeana
     # Class needs to implement {#request_url}
     module Requestable
       ##
-      # Request-specific params, to be overriden in including class
-      #
-      # @return [Hash]
-      def params
-        {}
-      end
-
-      ##
       # Query params with API key added
       #
       # @return [Hash]

@@ -1,19 +1,13 @@
+# frozen_string_literal: true
 module Europeana
   ##
   # An annotation of a Europeana object
   #
   # @see http://labs.europeana.eu/api/annotations
   class Annotation < Resource
-    self.base_url = 'https://www.europeana.eu/api/annotations'
-
-    class << self
-      def fetch(provider:, id:)
-        get(resource_url(provider: provider, id: id))
-      end
-
-      def resource_url(**args)
-        format "#{base_url}/%{provider}/%{id}.jsonld", args
-      end
+    configure do |annotations|
+      annotations.path_prefix = '/annotations'
+      annotations.resource_path = '/%{provider}/%{id}.jsonld'
     end
   end
 end
