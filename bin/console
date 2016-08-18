@@ -1,0 +1,19 @@
+#!/usr/bin/env ruby
+
+require 'dotenv'
+Dotenv.load
+
+require 'bundler/setup'
+require 'europeana/api'
+
+# You can add fixtures and/or initialization code here to make experimenting
+# with your gem easier. You can also use a different console, if you like.
+
+# (If you use this, don't forget to add pry to your Gemfile!)
+# require 'pry'
+# Pry.start
+
+Europeana::API.api_key = ENV['EUROPEANA_API_KEY']
+
+require 'irb'
+IRB.start
