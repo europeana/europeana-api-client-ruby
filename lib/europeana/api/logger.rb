@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'active_support/notifications'
 
 # Subscribe to Faraday request instrumentation
