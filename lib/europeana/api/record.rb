@@ -19,10 +19,8 @@ module Europeana
       # @param [String] id Europeana ID of the record
       # @param [Hash] params Request parameters
       def initialize(id, params = {})
-        params = params.deep_dup
-        extract_api_url(params)
+        self.request_params = params
         @id = id
-        @params = params
       end
 
       ##
