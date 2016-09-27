@@ -7,11 +7,9 @@ module Europeana
         class Base
           include Requestable
 
-          attr_accessor :params
-
           def initialize(id, params = {})
             @id = id
-            @params = params
+            self.request_params = params
           end
 
           def parse_response(response, options = {})
@@ -19,7 +17,7 @@ module Europeana
           end
 
           def request_url(_options = {})
-            Europeana::API.url + "/record#{@id}/#{api_method}.json"
+            api_url + "/record#{@id}/#{api_method}.json"
           end
 
           def api_method

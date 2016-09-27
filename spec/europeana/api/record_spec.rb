@@ -35,7 +35,7 @@ RSpec.describe Europeana::API::Record do
         end
 
         it 'sets params attribute' do
-          expect(subject.instance_variable_get(:@params)).to eq(params)
+          expect(subject.instance_variable_get(:@params)).to eq(HashWithIndifferentAccess.new(params))
         end
       end
     end
@@ -92,7 +92,7 @@ RSpec.describe Europeana::API::Record do
 
     context 'with API key' do
       it 'adds API key to params' do
-        expect(subject.params_with_authentication).to eq(params.merge(wskey: api_key))
+        expect(subject.params_with_authentication).to eq(HashWithIndifferentAccess.new(params).merge(wskey: api_key))
       end
     end
 

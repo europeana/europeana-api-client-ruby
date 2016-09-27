@@ -28,9 +28,7 @@ module Europeana
       ##
       # @param [Hash] params Europeana API request parameters for Search query
       def initialize(params = {})
-        params = params.deep_dup
-        extract_api_url(params)
-        @params = HashWithIndifferentAccess.new(params)
+        self.request_params = params
       end
 
       ##
