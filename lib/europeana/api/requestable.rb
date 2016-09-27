@@ -21,6 +21,12 @@ module Europeana
         {}
       end
 
+      def request_params=(params)
+        params = params.deep_dup
+        extract_api_url(params)
+        @params = HashWithIndifferentAccess.new(params)
+      end
+
       ##
       # Query params with API key added
       #
