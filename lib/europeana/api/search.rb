@@ -28,6 +28,8 @@ module Europeana
       ##
       # @param [Hash] params Europeana API request parameters for Search query
       def initialize(params = {})
+        params = params.deep_dup
+        extract_api_url(params)
         @params = HashWithIndifferentAccess.new(params)
       end
 
@@ -36,7 +38,7 @@ module Europeana
       #
       # @return [URI]
       def request_url(_options = {})
-        Europeana::API.url + '/search.json'
+        api_url + '/search.json'
       end
 
       alias_method :execute, :execute_request
