@@ -5,6 +5,14 @@ module Europeana
     #
     # Class needs to implement {#request_url}
     module Requestable
+      def extract_api_url(params)
+        @api_url = params.delete(:api_url)
+      end
+
+      def api_url
+        @api_url || Europeana::API.url
+      end
+
       ##
       # Request-specific params, to be overriden in including class
       #

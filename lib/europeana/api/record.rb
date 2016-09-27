@@ -19,6 +19,8 @@ module Europeana
       # @param [String] id Europeana ID of the record
       # @param [Hash] params Request parameters
       def initialize(id, params = {})
+        params = params.deep_dup
+        extract_api_url(params)
         @id = id
         @params = params
       end
@@ -59,7 +61,7 @@ module Europeana
       # @return [String]
       def request_url(options = {})
         options.assert_valid_keys(:ld)
-        (Europeana::API.url + "/record#{@id}.json").tap do |url|
+        (api_url + "/record#{@id}.json").tap do |url|
           url << 'ld' if options[:ld]
         end
       end
