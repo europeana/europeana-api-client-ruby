@@ -47,9 +47,9 @@ Europeana::API.api_key = 'xyz'
 ### Record search
 
 ```ruby
-search = Europeana::Record.search(query: '"first world war"') # => { "success" => true, "items" => [ ... ], "totalResults" => 1234, ... }
-search['items'] # => [ item1, item2, ... ]
-search['totalResults'] # => 1234
+search = Europeana::Record.search(query: '"first world war"')
+search.items # => [ item1, item2 ]
+search.totalResults # => 1234
 ```
 
 See http://labs.europeana.eu/api/search/ for details of the data returned in
@@ -58,8 +58,9 @@ the search response.
 ### Record retrieval
 
 ```ruby
-record = Europeana::Record.fetch('/abc/1234') # => { "success" => true, "object" => { ... }, ... }
-record['object'] # => { "title" => "...", "proxies" => [ ... ], "aggregations" => [ ... ], ... }
+record = Europeana::Record.fetch(id: '/abc/1234')
+record.title # => ["The title of this Europeana record"]
+record.proxies.first.dcType.en # => ["The dcType of the record's first proxy"]
 ```
 
 See http://labs.europeana.eu/api/record/ for details of the data returned in
