@@ -14,6 +14,9 @@ module Europeana
 
       Faraday::Request.register_middleware \
         authenticated_request: lambda { AuthenticatedRequest }
+
+      Faraday::Response.register_middleware \
+        json_parser: lambda { JsonParser }
     end
   end
 end

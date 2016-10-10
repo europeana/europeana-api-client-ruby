@@ -74,8 +74,7 @@ module Europeana
       ##
       # Searches for resources
       def search(**args)
-        response = get(search_url, **args)
-        collection(response, search_key)
+        get(search_url, **args).body
       end
 
       def collection(response, key = nil)

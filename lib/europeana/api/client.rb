@@ -1,7 +1,4 @@
 # frozen_string_literal: true
-
-require 'faraday'
-require 'faraday_middleware'
 require 'europeana/api/faraday_middleware'
 
 module Europeana
@@ -32,7 +29,7 @@ module Europeana
               conn.request :retry, max: 5, interval: 3,
                                    exceptions: [Errno::ECONNREFUSED, Errno::ETIMEDOUT, 'Timeout::Error',
                                                 Faraday::Error::TimeoutError, EOFError]
-              conn.response :json, content_type: /\bjson$/
+              conn.response :json_parser, content_type: /\bjson$/
             end
           end
         end
