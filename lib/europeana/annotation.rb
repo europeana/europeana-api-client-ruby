@@ -8,6 +8,7 @@ module Europeana
     configure do |annotations|
       annotations.path_prefix = '/annotations'
       annotations.resource_path = '/%{provider}/%{id}.jsonld'
+      annotations.search_path = '/search.jsonld'
     end
   end
 end
