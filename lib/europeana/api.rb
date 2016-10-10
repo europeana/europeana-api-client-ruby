@@ -15,7 +15,6 @@ require 'uri'
 module Europeana
   autoload :Annotation, 'europeana/annotation'
   autoload :Record, 'europeana/record'
-  autoload :Resource, 'europeana/resource'
 
   ##
   # Interface to Europeana's RESTful API(s)
@@ -23,6 +22,7 @@ module Europeana
     autoload :FaradayMiddleware, 'europeana/api/faraday_middleware'
     autoload :Client, 'europeana/api/client'
     autoload :Errors, 'europeana/api/errors'
+    autoload :Resource, 'europeana/api/resource'
 
     class << self
       ##

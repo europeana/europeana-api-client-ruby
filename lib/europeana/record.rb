@@ -4,7 +4,7 @@ module Europeana
   # Interface to the Europeana API Record method
   #
   # @see http://labs.europeana.eu/api/record/
-  class Record < Resource
+  class Record < API::Resource
     autoload :Hierarchy, 'europeana/record/hierarchy'
 
     configure do |records|
