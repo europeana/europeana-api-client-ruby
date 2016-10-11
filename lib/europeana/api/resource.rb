@@ -31,10 +31,6 @@ module Europeana
       # [String] URL path to API search method for a resource
       class_attribute :search_path
 
-      ##
-      # [Faraday::Response] API response used to construct this resource
-      attr_accessor :_response
-
       class << self
         delegate :get, to: Europeana::API::Client
 
