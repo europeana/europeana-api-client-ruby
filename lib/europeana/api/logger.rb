@@ -1,5 +1,4 @@
 # frozen_string_literal: true
-
 require 'active_support/notifications'
 
 # Subscribe to Faraday request instrumentation
@@ -7,6 +6,6 @@ ActiveSupport::Notifications.subscribe('request.faraday') do |name, starts, ends
   url = env[:url]
   http_method = env[:method].to_s.upcase
   duration = ends - starts
-  $stdout.puts '[%s] %s %s (%.3f s)' % [url.host, http_method, url.request_uri, duration]
+  $stdout.puts '%s %s (%.3f s)' % [http_method, url, duration]
 end
 
