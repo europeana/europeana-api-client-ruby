@@ -68,8 +68,9 @@ module Europeana
         ##
         # Gets one resource
         def fetch(**args)
-          response = get(resource_url(**args))
-          new(response.body.send(resource_key))
+          query_params = args.slice!(*extract_format_keys(resource_path))
+          response = get(resource_url(args), **query_params)
+          new(response.body)
         end
 
         ##
@@ -86,6 +87,10 @@ module Europeana
           else
             base_url + path
           end
+        end
+
+        def extract_format_keys(string)
+          string.scan(/%\{(.*?)\}/).flatten.map(&:to_sym)
         end
 
         def resource_url(**args)
