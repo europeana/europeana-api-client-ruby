@@ -35,8 +35,6 @@ module Europeana
       # [Faraday::Response] API response used to construct this resource
       attr_accessor :_response
 
-      delegate :[], :key?, to: :_body
-
       class << self
         delegate :get, to: Europeana::API::Client
 
