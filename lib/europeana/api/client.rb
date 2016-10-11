@@ -22,10 +22,8 @@ module Europeana
         def connection
           @connection ||= begin
             Faraday.new do |conn|
-              conn.adapter Faraday.default_adapter
-              conn.url_prefix = Europeana::API.url
-
               conn.request :instrumentation
+              conn.request :parameter_repetition
               conn.request :authenticated_request
               conn.request :retry, max: 5, interval: 3,
                                    exceptions: [Errno::ECONNREFUSED, Errno::ETIMEDOUT, 'Timeout::Error',
@@ -33,6 +31,9 @@ module Europeana
 
               conn.response :json_parser, content_type: /\bjson$/
               conn.response :html_handler, content_type: /\bhtml$/
+
+              conn.adapter Faraday.default_adapter
+              conn.url_prefix = Europeana::API.url
             end
           end
         end

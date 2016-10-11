@@ -15,11 +15,11 @@ module Europeana
       autoload :HtmlHandler, 'europeana/api/faraday_middleware/response/html_handler'
 
       Faraday::Request.register_middleware \
-        authenticated_request: lambda { AuthenticatedRequest }
+        authenticated_request: lambda { AuthenticatedRequest },
+        parameter_repetition: lambda { ParameterRepetition }
 
       Faraday::Response.register_middleware \
-        json_parser: lambda { JsonParser }
-      Faraday::Response.register_middleware \
+        json_parser: lambda { JsonParser },
         html_handler: lambda { HtmlHandler }
     end
   end
