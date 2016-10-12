@@ -23,6 +23,7 @@ module Europeana
     autoload :Client, 'europeana/api/client'
     autoload :Errors, 'europeana/api/errors'
     autoload :Resource, 'europeana/api/resource'
+    autoload :ResponseBuilder, 'europeana/api/response_builder'
 
     class << self
       ##

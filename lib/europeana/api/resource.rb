@@ -2,50 +2,56 @@
 module Europeana
   module API
     ##
-    # Base class for resources retrieved from the Europeana API
+    # Module for resources retrieved from the Europeana API
+    #
+    # All classes including this are expected to implement a factory method
+    # named `.build_from_api_response` accepting the `Faraday::Response` object
+    # as its single parameter.
     module Resource
       extend ActiveSupport::Concern
 
-      CONFIG_SETTINGS = %i{base_url resource_key resource_key resource_path search_path}.freeze
+      include API::ResponseBuilder
+
+      CONFIG_SETTINGS = %i{api_base_url api_path_prefix api_resource_path api_search_path api_search_response_class}.freeze
 
       included do
         ##
         # [String] Base URL for all API requests for a class of resources. If
         #   present, replaces `Europeana::API.url`, for the one resource type.
-        class_attribute :base_url
+        class_attribute :api_base_url
 
         ##
         # [String] Path prefix for all requests to a class of resources.
-        class_attribute :path_prefix
+        class_attribute :api_path_prefix
 
         ##
         # [String] Hash key for one individual resource in a JSON response
-        class_attribute :resource_key
+        # class_attribute :api_resource_key
 
         ##
         # [String] Tokenized API URL path for one individual resource
-        class_attribute :resource_path
+        class_attribute :api_resource_path
 
         ##
         # [String] Hash key for search results in a JSON response
-        class_attribute :search_key
+        # class_attribute :api_search_key
 
         ##
         # [String] URL path to API search method for a resource
-        class_attribute :search_path
+        class_attribute :api_search_path
+
+        ##
+        # [Class] Class for search responses
+        #
+        # Must respond to `.build_from_api_response` method
+        class_attribute :api_search_response_class
 
         ##
         # API response
-        attr_accessor :response
+        attr_accessor :api_response
       end
 
       class_methods do
-        def new_from_api_response(response)
-          resource = new
-          resource.response = response
-          resource
-        end
-
         ##
         # Configure class attributes
         #
@@ -75,24 +81,29 @@ module Europeana
         ##
         # Gets one resource
         def fetch(**args)
-          query_params = args.slice!(*extract_format_keys(resource_path))
-          response = Europeana::API::Client.get(resource_api_url(args), **query_params)
-          new_from_api_response(response)
+          query_params = args.slice!(*extract_format_keys(api_resource_path))
+          response = Europeana::API::Client.get(api_resource_url(args), **query_params)
+          build_from_api_response(response)
         end
 
         ##
         # Searches for resources
         def search(**args)
-          Europeana::API::Client.get(search_api_url, **args).body
+          response = Europeana::API::Client.get(api_search_url, **args)
+          if api_search_response_class.nil?
+            response.body
+          else
+            api_search_response_class.build_from_api_response(response)
+          end
         end
 
         def build_api_url(method_path)
-          path = path_prefix + method_path
+          path = api_path_prefix + method_path
 
-          if base_url.nil?
+          if api_base_url.nil?
             path.sub(%r{\A/}, '') # remove leading slash for relative URLs
           else
-            base_url + path
+            api_base_url + path
           end
         end
 
@@ -100,12 +111,12 @@ module Europeana
           string.scan(/%\{(.*?)\}/).flatten.map(&:to_sym)
         end
 
-        def resource_api_url(**args)
-          build_api_url(format(resource_path, args))
+        def api_resource_url(**args)
+          build_api_url(format(api_resource_path, args))
         end
 
-        def search_url
-          build_api_url(search_path)
+        def api_search_url
+          build_api_url(api_search_path)
         end
       end
     end

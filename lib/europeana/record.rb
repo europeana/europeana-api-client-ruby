@@ -10,11 +10,9 @@ module Europeana
     autoload :Hierarchy, 'europeana/record/hierarchy'
 
     configure_api do |records|
-      records.path_prefix = '/v2'
-      records.resource_path = '/record/%{id}.json'
-      records.resource_key = 'object'
-      records.search_path = '/search.json'
-      records.search_key = 'items'
+      records.api_path_prefix = '/v2'
+      records.api_resource_path = '/record/%{id}.json'
+      records.api_search_path = '/search.json'
     end
 
     class << self
