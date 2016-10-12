@@ -40,6 +40,11 @@ module Europeana
       end
     end
 
+    def annotations(**params)
+      search_params = params.merge(query: %W(target_id:"http://data.europeana.eu/item#{self.about}"))
+      Annotation.search(search_params)
+    end
+
 # Old `Record` methods to be ported follow
 
 #     def hierarchy
