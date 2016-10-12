@@ -29,7 +29,8 @@ module Europeana
                                    exceptions: [Errno::ECONNREFUSED, Errno::ETIMEDOUT, 'Timeout::Error',
                                                 Faraday::Error::TimeoutError, EOFError]
 
-              conn.response :json_parser, content_type: /\bjson$/
+              conn.response :json_ld_parser, content_type: /\bld\+json$/
+              conn.response :json_parser, content_type: /\b(?<!ld\+)json$/
               conn.response :html_handler, content_type: /\bhtml$/
 
               conn.adapter Faraday.default_adapter

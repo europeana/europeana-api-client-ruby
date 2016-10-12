@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-require 'active_support/cache'
+require 'active_support/concern'
 require 'active_support/core_ext/class/attribute'
 require 'active_support/core_ext/hash/indifferent_access'
 require 'active_support/core_ext/hash/slice'
@@ -67,8 +67,6 @@ module Europeana
         self.url = 'https://www.europeana.eu/api'
         self.max_retries = 5
         self.retry_delay = 3
-        self.cache_store = ActiveSupport::Cache::NullStore.new
-        self.cache_expires_in = 24.hours
       end
 
       ##

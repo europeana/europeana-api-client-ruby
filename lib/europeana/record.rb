@@ -4,10 +4,12 @@ module Europeana
   # Interface to the Europeana API Record method
   #
   # @see http://labs.europeana.eu/api/record/
-  class Record < API::Resource
+  class Record
+    include API::Resource
+
     autoload :Hierarchy, 'europeana/record/hierarchy'
 
-    configure do |records|
+    configure_api do |records|
       records.path_prefix = '/v2'
       records.resource_path = '/record/%{id}.json'
       records.resource_key = 'object'
