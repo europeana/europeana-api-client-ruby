@@ -19,5 +19,16 @@ module Europeana
 
     has_api_response_properties :body, :created, :creator, :generated,
                                 :generator, :id, :motivation, :target, :type
+
+    def record_id
+      fail %W(target is not a Europeana record: "#{target}") \
+        unless target.start_with?('http://data.europeana.eu/item/')
+
+      target.sub(%r{\Ahttp://data.europeana.eu/item}, '')
+    end
+
+    def record
+      @record ||= Record.fetch(id: record_id)
+    end
   end
 end
