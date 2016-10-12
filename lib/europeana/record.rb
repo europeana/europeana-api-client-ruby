@@ -11,9 +11,15 @@ module Europeana
 
     configure_api do |records|
       records.api_path_prefix = '/v2'
+      records.api_resource_key = 'object'
       records.api_resource_path = '/record/%{id}.json'
       records.api_search_path = '/search.json'
     end
+
+    has_api_response_properties :about, :aggregations, :edmDatasetName,
+                                :europeanaAggregation, :europeanaCollectionName,
+                                :europeanaCompleteness, :providedCHOs, :proxies,
+                                :timestamp_created, :timestamp_update, :title, :type
 
     class << self
       ##

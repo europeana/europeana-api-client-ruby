@@ -12,7 +12,8 @@ module Europeana
 
       include API::ResponseBuilder
 
-      CONFIG_SETTINGS = %i{api_base_url api_path_prefix api_resource_path api_search_path api_search_response_class}.freeze
+      CONFIG_SETTINGS = %i{api_base_url api_path_prefix api_resource_key
+                           api_resource_path api_search_path api_search_response_class}.freeze
 
       included do
         ##
@@ -26,7 +27,7 @@ module Europeana
 
         ##
         # [String] Hash key for one individual resource in a JSON response
-        # class_attribute :api_resource_key
+        class_attribute :api_resource_key
 
         ##
         # [String] Tokenized API URL path for one individual resource
