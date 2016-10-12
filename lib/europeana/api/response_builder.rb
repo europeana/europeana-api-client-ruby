@@ -29,18 +29,21 @@ module Europeana
         def build_from_api_response(response)
           new.tap do |object|
             object.api_response = response
-
-            body = if self.respond_to?(:api_resource_key) && !self.api_resource_key.nil?
-                     response.body[self.api_resource_key]
-                   else
-                     response.body
-                   end
+            body = api_response_body_for_resource(response)
 
             (self.api_response_properties || []).each do |property|
               attr_name = property.to_s.underscore
               object.send("#{attr_name}=", body[property.to_s])
             end
           end
+        end
+
+        def api_response_body_for_resource(response)
+          if self.respond_to?(:api_resource_key) && !self.api_resource_key.nil?
+             response.body[self.api_resource_key]
+           else
+             response.body
+           end
         end
       end
     end
