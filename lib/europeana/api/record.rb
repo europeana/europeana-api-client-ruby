@@ -10,7 +10,7 @@ module Europeana
 
       has_api_endpoint :search, path: '/v2/search.json'
       has_api_endpoint :get,
-        path: '/v2/record/%{id}.%{format}', defaults: { format: 'json' }
+        path: '/v2/record/%{id}.json'
 
       # Hierarchies
       %w(self parent children preceding_siblings following_siblings ancestor_self_siblings).each do |hierarchical|
