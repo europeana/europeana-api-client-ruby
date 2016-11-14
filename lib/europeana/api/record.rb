@@ -12,6 +12,11 @@ module Europeana
       has_api_endpoint :get,
         path: '/v2/record/%{id}.%{format}', defaults: { format: 'json' }
 
+      # Hierarchies
+      %w(self parent children preceding_siblings following_siblings ancestor_self_siblings).each do |hierarchical|
+        has_api_endpoint hierarchical.to_sym, path: "/v2/record/%{id}/#{hierarchical.dasherize}.json"
+      end
+
       class << self
         ##
         # Escapes Lucene syntax special characters for use in query parameters.
