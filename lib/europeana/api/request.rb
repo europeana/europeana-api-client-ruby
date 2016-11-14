@@ -20,9 +20,9 @@ module Europeana
       ##
       # @return [Faraday::Response]
       def execute
-        response = Client.get(url, **query_params)
-        inspect_response_for_errors(response)
-        response.body
+        Client.get(url, **query_params).tap do |response|
+          Response.validate!(response, endpoint)
+        end.body
       end
 
       def url
@@ -50,21 +50,6 @@ module Europeana
         else
           api_url + request_path
         end
-      end
-
-      def inspect_response_for_errors(response)
-        return if response.body[:success]
-
-        # Endpoint specific errors
-        (endpoint[:errors] || {}).each_pair do |error_pattern, exception_class|
-          fail exception_class, response.body[:error] if response.body[:error] =~ Regexp.new(error_pattern)
-        end
-
-        # Generic errors
-        fail Errors::ResourceNotFoundError, response.body[:error] if response.status == 404
-        fail Errors::MissingAPIKeyError, response.body[:error] if response.status == 403 && response.body[:error] =~ /No API key/
-        fail Errors::ClientError, response.body[:error] if (400..499).include?(response.status)
-        fail Errors::ServerError, response.body[:error] if (400..499).include?(response.status)
       end
     end
   end

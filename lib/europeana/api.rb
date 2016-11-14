@@ -23,6 +23,7 @@ module Europeana
     autoload :Record, 'europeana/api/record'
     autoload :Request, 'europeana/api/request'
     autoload :Resource, 'europeana/api/resource'
+    autoload :Response, 'europeana/api/response'
 
     class << self
       ##
