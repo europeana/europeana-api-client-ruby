@@ -6,13 +6,15 @@ module Europeana
     class Request
       attr_reader :endpoint
       attr_reader :params
+      attr_reader :api_url
 
       ##
       # @param endpoint [Hash] endpoint options
       # @param params [Hash]
       def initialize(endpoint, **params)
         @endpoint = endpoint
-        @params = params
+        @params = params.dup
+        @api_url = @params.delete(:api_url)
       end
 
       ##
@@ -48,7 +50,11 @@ module Europeana
 
       def build_api_url(**params)
         request_path = format(endpoint[:path], params)
-        request_path.sub(%r{\A/}, '') # remove leading slash for relative URLs
+        if api_url.nil?
+          request_path.sub(%r{\A/}, '') # remove leading slash for relative URLs
+        else
+          api_url + request_path
+        end
       end
 
       def inspect_response_for_errors(response)
