@@ -28,7 +28,8 @@ module Europeana
       protected
 
       def format_params
-        params.slice(*endpoint_path_format_keys).reverse_merge(endpoint[:defaults])
+        params.slice(*endpoint_path_format_keys).
+          reverse_merge(endpoint_path_format_defaults)
       end
 
       def query_params
@@ -37,6 +38,10 @@ module Europeana
 
       def endpoint_path_format_keys
         @endpoint_path_format_keys ||= endpoint[:path].scan(/%\{(.*?)\}/).flatten.map(&:to_sym)
+      end
+
+      def endpoint_path_format_defaults
+        endpoint[:defaults] || {}
       end
 
       def build_api_url(**params)
