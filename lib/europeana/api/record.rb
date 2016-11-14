@@ -8,8 +8,6 @@ module Europeana
     class Record
       include Resource
 
-      autoload :Hierarchy, 'europeana/record/hierarchy'
-
       has_api_endpoint :search, path: '/v2/search.json'
       has_api_endpoint :get,
         path: '/v2/record/%{id}.%{format}', defaults: { format: 'json' }
