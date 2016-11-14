@@ -33,7 +33,6 @@ module Europeana
 
               conn.response :json_openstruct, content_type: /\bjson$/
               conn.response :html, content_type: /\bhtml$/
-              conn.response :xml, content_type: /\bxml$/
 
               conn.adapter Faraday.default_adapter
               conn.url_prefix = Europeana::API.url
