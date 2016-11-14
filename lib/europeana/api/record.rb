@@ -8,9 +8,13 @@ module Europeana
     class Record
       include Resource
 
-      has_api_endpoint :search, path: '/v2/search.json'
-      has_api_endpoint :get,
-        path: '/v2/record/%{id}.json'
+      has_api_endpoint :search,
+        path: '/v2/search.json',
+        errors: {
+          'Invalid query parameter' => Errors::RequestError,
+          /1000 search results/ => Errors::PaginationError
+        }
+      has_api_endpoint :get, path: '/v2/record/%{id}.json'
 
       # Hierarchies
       %w(self parent children preceding_siblings following_siblings ancestor_self_siblings).each do |hierarchical|
@@ -35,27 +39,6 @@ module Europeana
           end
         end
       end
-
-  # Old `Search methods to be ported` follow
-
-  #       ##
-  #       # Examines the `success` and `error` fields of the response for failure
-  #       #
-  #       # @raise [Europeana::Errors::RequestError] if API response has
-  #       #   `success:false`
-  #       # @see Requestable#parse_response
-  #       def parse_response(response, _options = {})
-  #         super.tap do |body|
-  #           unless body[:success]
-  #             klass = if body.key?(:error) && body[:error] =~ /1000 search results/
-  #                       API::Errors::Request::PaginationError
-  #                     else
-  #                       API::Errors::RequestError
-  #                     end
-  #             fail klass, (body.key?(:error) ? body[:error] : response.status)
-  #           end
-  #         end
-  #       end
     end
   end
 end

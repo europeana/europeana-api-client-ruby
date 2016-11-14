@@ -16,7 +16,6 @@ module Europeana
           query = Rack::Utils.parse_query(env.url.query)
           return if query.key?('wskey')
 
-          fail Errors::MissingAPIKeyError unless Europeana::API.api_key.present?
           query['wskey'] = Europeana::API.api_key
           env.url.query = Rack::Utils.build_query(query)
         end
