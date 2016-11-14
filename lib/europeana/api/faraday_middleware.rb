@@ -12,13 +12,15 @@ module Europeana
       autoload :ParameterRepetition, 'europeana/api/faraday_middleware/request/parameter_repetition'
 
       autoload :HandleHtml, 'europeana/api/faraday_middleware/response/handle_html'
+      autoload :ParseJsonToOpenStruct, 'europeana/api/faraday_middleware/response/parse_json_to_open_struct'
 
       Faraday::Request.register_middleware \
         authenticated_request: lambda { AuthenticatedRequest },
         parameter_repetition: lambda { ParameterRepetition }
 
       Faraday::Response.register_middleware \
-        html: lambda { HandleHtml }
+        html: lambda { HandleHtml },
+        json_openstruct: lambda { ParseJsonToOpenStruct }
     end
   end
 end

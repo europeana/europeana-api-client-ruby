@@ -31,7 +31,7 @@ module Europeana
                                    exceptions: [Errno::ECONNREFUSED, Errno::ETIMEDOUT, 'Timeout::Error',
                                                 Faraday::Error::TimeoutError, EOFError]
 
-              conn.response :json, content_type: /\bjson$/
+              conn.response :json_openstruct, content_type: /\bjson$/
               conn.response :html, content_type: /\bhtml$/
               conn.response :xml, content_type: /\bxml$/
 
