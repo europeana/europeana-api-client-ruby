@@ -7,6 +7,8 @@ module Europeana
     # The API client responsible for handling requests and responses
     class Client
       class << self
+        ##
+        # @return [Faraday::Response]
         def get(url, params = {}, headers = nil)
           connection.get(url, params, headers)
         end
@@ -30,7 +32,7 @@ module Europeana
                                                 Faraday::Error::TimeoutError, EOFError]
 
               conn.response :json, content_type: /\bjson$/
-              conn.response :html_handler, content_type: /\bhtml$/
+              conn.response :html, content_type: /\bhtml$/
 
               conn.adapter Faraday.default_adapter
               conn.url_prefix = Europeana::API.url

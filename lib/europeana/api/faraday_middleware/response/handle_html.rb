@@ -6,7 +6,7 @@ module Europeana
     module FaradayMiddleware
       ##
       # Handles HTML responses from the API, which are never desired
-      class HtmlHandler < ::FaradayMiddleware::ResponseMiddleware
+      class HandleHtml < ::FaradayMiddleware::ResponseMiddleware
         def process_response(env)
           super
 
