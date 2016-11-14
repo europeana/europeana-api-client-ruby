@@ -10,7 +10,7 @@ module Europeana
         ##
         # @return [Faraday::Response]
         def get(url, params = {}, headers = nil)
-          connection.get(url, params, headers)
+          connection.get(url, params, headers).body
         end
 
         ##

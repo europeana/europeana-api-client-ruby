@@ -13,17 +13,17 @@ require 'logger'
 require 'uri'
 
 module Europeana
-  autoload :Annotation, 'europeana/annotation'
-  autoload :Record, 'europeana/record'
-
   ##
   # Interface to Europeana's RESTful API(s)
   module API
+    autoload :Annotation, 'europeana/api/annotation'
     autoload :FaradayMiddleware, 'europeana/api/faraday_middleware'
     autoload :Client, 'europeana/api/client'
+    autoload :Endpoint, 'europeana/api/endpoint'
     autoload :Errors, 'europeana/api/errors'
+    autoload :Record, 'europeana/api/record'
+    autoload :Request, 'europeana/api/request'
     autoload :Resource, 'europeana/api/resource'
-    autoload :ResponseBuilder, 'europeana/api/response_builder'
 
     class << self
       ##
@@ -68,22 +68,6 @@ module Europeana
         self.url = 'https://www.europeana.eu/api'
         self.max_retries = 5
         self.retry_delay = 3
-      end
-
-      ##
-      # Sends a Record request to the Europeana API
-      #
-      # Equivalent to:
-      #   record = Europeana::Record.new(record_id, params)
-      #   record.fetch(options)
-      #
-      # @param [String] Record ID
-      # @param [Hash] params Query parameters
-      # @param [Hash] options (see Europeana::API::Record#get)
-      # @return [Hash] search response
-      # @see Europeana::API::Record#get
-      def record(record_id, params = {}, options = {})
-        Record.new(record_id, params).fetch(options)
       end
 
       def logger
