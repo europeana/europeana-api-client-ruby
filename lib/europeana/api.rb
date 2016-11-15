@@ -20,6 +20,7 @@ module Europeana
     autoload :FaradayMiddleware, 'europeana/api/faraday_middleware'
     autoload :Client, 'europeana/api/client'
     autoload :Errors, 'europeana/api/errors'
+    autoload :Queue, 'europeana/api/queue'
     autoload :Record, 'europeana/api/record'
     autoload :Request, 'europeana/api/request'
     autoload :Resource, 'europeana/api/resource'
@@ -49,6 +50,20 @@ module Europeana
 
       def logger
         @logger ||= (defined?(Rails) && Rails.logger) ? Rails.logger : Logger.new(STDOUT)
+      end
+
+      def in_parallel(&block)
+        client = Client.new
+        client.queue.instance_eval(&block)
+        client.queue.run
+      end
+
+      def annotation
+        Annotation
+      end
+
+      def record
+        Record
       end
     end
 

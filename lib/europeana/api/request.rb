@@ -7,6 +7,7 @@ module Europeana
       attr_reader :endpoint
       attr_reader :params
       attr_reader :api_url
+      attr_writer :client
 
       ##
       # @param endpoint [Hash] endpoint options
@@ -18,15 +19,22 @@ module Europeana
       end
 
       ##
-      # @return [Faraday::Response]
+      # @return [Response]
       def execute
-        Client.get(url, **query_params).tap do |response|
-          Response.validate!(response, endpoint)
-        end.body
+        faraday_response = client.get(url, **query_params)
+        response = Response.new(self, faraday_response)
+        return response if client.in_parallel?
+
+        response.validate!
+        response.body
       end
 
       def url
         build_api_url(**format_params)
+      end
+
+      def client
+        @client ||= Client.new
       end
 
       protected

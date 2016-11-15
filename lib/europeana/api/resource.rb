@@ -3,10 +3,6 @@ module Europeana
   module API
     ##
     # Module for resources retrieved from the Europeana API
-    #
-    # All classes including this are expected to implement a factory method
-    # named `.build_from_api_response` accepting the `Faraday::Response` object
-    # as its single parameter.
     module Resource
       extend ActiveSupport::Concern
 
@@ -20,9 +16,12 @@ module Europeana
           self.api_endpoints[name] = options.reverse_merge(class: self)
 
           define_singleton_method(name) do |**params|
-            endpoint = self.api_endpoints[name]
-            Request.new(endpoint, **params).execute
+            api_request_for_endpoint(name, **params).execute
           end
+        end
+
+        def api_request_for_endpoint(name, **params)
+          Request.new(self.api_endpoints[name], **params)
         end
       end
     end
