@@ -17,14 +17,16 @@ module Europeana
   # Interface to Europeana's RESTful API(s)
   module API
     autoload :Annotation, 'europeana/api/annotation'
-    autoload :FaradayMiddleware, 'europeana/api/faraday_middleware'
     autoload :Client, 'europeana/api/client'
     autoload :Errors, 'europeana/api/errors'
+    autoload :FaradayMiddleware, 'europeana/api/faraday_middleware'
     autoload :Queue, 'europeana/api/queue'
     autoload :Record, 'europeana/api/record'
     autoload :Request, 'europeana/api/request'
     autoload :Resource, 'europeana/api/resource'
     autoload :Response, 'europeana/api/response'
+
+    @url = 'https://www.europeana.eu/api'
 
     class << self
       ##
@@ -41,12 +43,6 @@ module Europeana
 
       # @return [Logger]
       attr_writer :logger
-
-      ##
-      # Sets configuration values to their defaults
-      def defaults!
-        self.url = 'https://www.europeana.eu/api'
-      end
 
       def logger
         @logger ||= (defined?(Rails) && Rails.logger) ? Rails.logger : Logger.new(STDOUT)
@@ -66,7 +62,5 @@ module Europeana
         Record
       end
     end
-
-    defaults!
   end
 end
