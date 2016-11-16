@@ -6,5 +6,5 @@ ActiveSupport::Notifications.subscribe('request.faraday') do |_name, starts, end
   url = env[:url]
   http_method = env[:method].to_s.upcase
   duration = ends - starts
-  Europeana::API.logger.info(format('%s %s (%.3f s)', http_method, url, duration)
+  Europeana::API.logger.info(format('%s %s (%.3f s)', http_method, url, duration))
 end
