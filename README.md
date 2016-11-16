@@ -41,7 +41,7 @@ Configure your application with the API key:
 
 ```ruby
 require 'europeana/api'
-Europeana::API.api_key = 'xyz'
+Europeana::API.key = 'xyz'
 ```
 
 ### Record search

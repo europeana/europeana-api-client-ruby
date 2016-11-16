@@ -33,7 +33,7 @@ module Europeana
       # The Europeana API key, required for authentication
       #
       # @return [String]
-      attr_accessor :api_key
+      attr_accessor :key
 
       ##
       # The API's base URL

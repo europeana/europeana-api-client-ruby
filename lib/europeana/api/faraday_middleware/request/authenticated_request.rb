@@ -16,7 +16,7 @@ module Europeana
           query = Rack::Utils.parse_query(env.url.query)
           return if query.key?('wskey')
 
-          query['wskey'] = Europeana::API.api_key
+          query['wskey'] = Europeana::API.key
           env.url.query = Rack::Utils.build_query(query)
         end
       end
