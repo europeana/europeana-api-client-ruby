@@ -1,61 +1,45 @@
-RSpec.describe Europeana::Annotation do
-  before(:each) do
-    described_class.reset!
-  end
+# frozen_string_literal: true
+RSpec.describe Europeana::API::Annotation do
+  it_behaves_like 'a resource with API endpoint', :get
+  it_behaves_like 'a resource with API endpoint', :search
 
-  it { is_expected.to be_a(Europeana::Resource) }
+  describe '.get' do
+    before do
+      stub_request(:get, %r{://www.europeana.eu/api/annotations/abc/123}).
+        to_return(status: 200,
+                  body: '{"@context":"https://www.w3.org/ns/anno.jsonld", "body":"Sheet music"}',
+                  headers: { 'Content-Type' => 'application/ld+json' })
+    end
 
-  describe '.path_prefix' do
-    it 'defaults to "/annotations"' do
-      expect(described_class.path_prefix).to eq('/annotations')
+    it 'requests an annotation from the API' do
+      described_class.get(provider: 'abc', id: '123')
+      expect(a_request(:get, %r{www.europeana.eu/api/annotations/abc/123})).to have_been_made.once
+    end
+
+    it 'returns the body of the response' do
+      record = described_class.get(provider: 'abc', id: '123')
+      expect(record).to be_an(OpenStruct)
+      expect(record).to respond_to(:body)
     end
   end
 
-  describe '.fetch' do
-    context 'with provider and identifier' do
-      it 'gets annotation from API' do
-        params = { provider: 'abc', id: '123' }
-        api_url = %r{www.europeana.eu/api/annotations/#{params[:provider]}/#{params[:id]}}
-        stub_request(:get, api_url).to_return(body: '{"success":true}')
-
-        described_class.fetch(params)
-        expect(a_request(:get, api_url)).to have_been_made.once
-      end
-
-      it "returns instance of #{described_class}" do
-        params = { provider: 'abc', id: '123' }
-        api_url = %r{www.europeana.eu/api/annotations/#{params[:provider]}/#{params[:id]}}
-        stub_request(:get, api_url).to_return(body: '{"success":true}')
-
-        expect(described_class.fetch(params)).to be_a(described_class)
-      end
+  describe '.search' do
+    before do
+      stub_request(:get, %r{://www.europeana.eu/api/annotations/search}).
+        to_return(status: 200,
+                  body: '{"@context": "https://www.w3.org/ns/anno.jsonld", "items":[]}',
+                  headers: { 'Content-Type' => 'application/ld+json' })
     end
-  end
 
-  describe '.resource_url' do
-    context 'with provider and id' do
-      context 'with default URL prefix' do
-        it 'combines them' do
-          params = { provider: 'abc', id: '123' }
-          expect(described_class.resource_url(params)).to eq('annotations/abc/123.jsonld')
-        end
-      end
+    it 'requests an annotation search from the API' do
+      described_class.search(query: '*:*')
+      expect(a_request(:get, %r{www.europeana.eu/api/annotations/search})).to have_been_made.once
+    end
 
-      context 'with custom base URL' do
-        it 'combines them' do
-          described_class.base_url = 'http://www.example.com/api'
-          params = { provider: 'abc', id: '123' }
-          expect(described_class.resource_url(params)).to eq('http://www.example.com/api/annotations/abc/123.jsonld')
-        end
-      end
-
-      context 'with custom path prefix' do
-        it 'combines them' do
-          described_class.path_prefix = '/annotation'
-          params = { provider: 'abc', id: '123' }
-          expect(described_class.resource_url(params)).to eq('annotation/abc/123.jsonld')
-        end
-      end
+    it 'returns the body of the response' do
+      results = described_class.search(query: '*:*')
+      expect(results).to be_an(OpenStruct)
+      expect(results).to respond_to(:items)
     end
   end
 end

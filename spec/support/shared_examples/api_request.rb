@@ -2,7 +2,7 @@
 shared_examples 'API request' do
   context 'without API key' do
     before(:each) do
-      Europeana::API.api_key = nil
+      Europeana::API.key = nil
     end
 
     it 'sends no HTTP request' do
@@ -16,26 +16,12 @@ shared_examples 'API request' do
 
   context 'with API key' do
     before(:all) do
-      Europeana::API.api_key = 'xyz'
+      Europeana::API.key = 'xyz'
     end
 
     it 'returns the response as a Hash' do
       response = subject
       expect(response).to be_a(Hash)
-    end
-
-    context 'when the API is unavailable' do
-      before(:each) do
-        Europeana::API.retry_delay = 0
-      end
-
-      it 'waits then retries' do
-        stub_request(:get, %r{www.europeana.eu/api}).
-          to_timeout.times(1).then.
-          to_return(body: '{"success":true}')
-        subject
-        expect(a_request(:get, %r{www.europeana.eu/api})).to have_been_made.times(2)
-      end
     end
 
     context 'when API response is unsuccessful' do

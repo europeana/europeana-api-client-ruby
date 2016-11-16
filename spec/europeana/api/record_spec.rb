@@ -1,141 +1,71 @@
 # frozen_string_literal: true
-RSpec.describe Europeana::Record do
-  let(:api_key) { 'xyz' }
-  let(:record_id) { '/abc/1234' }
-  let(:params) { { callback: 'doSomething();' } }
+RSpec.describe Europeana::API::Record do
+  it_behaves_like 'a resource with API endpoint', :get
+  it_behaves_like 'a resource with API endpoint', :search
+  it_behaves_like 'a resource with API endpoint', :self
+  it_behaves_like 'a resource with API endpoint', :parent
+  it_behaves_like 'a resource with API endpoint', :children
+  it_behaves_like 'a resource with API endpoint', :following_siblings
+  it_behaves_like 'a resource with API endpoint', :preceding_siblings
+  it_behaves_like 'a resource with API endpoint', :ancestor_self_siblings
 
-  before do
-    Europeana::API.api_key = api_key
+  describe '.get' do
+    before do
+      stub_request(:get, %r{://www\.europeana\.eu/api/v2/record/abc/123\.json}).
+        to_return(status: 200, body: '{"success":true, "object":{}}', headers: { 'Content-Type' => 'application/json' })
+    end
+
+    it 'requests a record from the API' do
+      described_class.get(id: '/abc/123')
+      expect(a_request(:get, %r{www\.europeana\.eu/api/v2/record/abc/123\.json})).to have_been_made.once
+    end
+
+    it 'returns the body of the response' do
+      record = described_class.get(id: '/abc/123')
+      expect(record).to be_an(OpenStruct)
+      expect(record).to respond_to(:object)
+    end
   end
 
   describe '.search' do
-    subject { described_class.search(params) }
-    it_behaves_like 'search request'
-  end
-
-  describe '#new' do
-    context 'without record ID' do
-      it 'raises error' do
-        expect { subject }.to raise_error(ArgumentError)
-      end
+    before do
+      stub_request(:get, %r{://www\.europeana\.eu/api/v2/search\.json}).
+        to_return(status: 200, body: '{"success":true, "items":[]}', headers: { 'Content-Type' => 'application/json' })
     end
 
-    context 'with record ID' do
-      context 'without params' do
-        subject { described_class.new(record_id) }
+    it 'requests a record search from the API' do
+      described_class.search(query: '*:*')
+      expect(a_request(:get, %r{www\.europeana\.eu/api/v2/search\.json\?query=*:*})).to have_been_made.once
+    end
 
-        it 'should not raise error' do
-          expect { subject }.to_not raise_error
-        end
+    it 'returns the body of the response' do
+      results = described_class.search(query: '*:*')
+      expect(results).to be_an(OpenStruct)
+      expect(results).to respond_to(:items)
+    end
+  end
 
-        it { is_expected.to be_a(Europeana::Resource) }
-
-        it 'sets id attribute' do
-          expect(subject.instance_variable_get(:@id)).to eq(record_id)
-        end
+  %w(self parent children preceding_siblings following_siblings ancestor_self_siblings).each do |endpoint|
+    describe ".#{endpoint}" do
+      before do
+        stub_request(:get, %r{://www\.europeana\.eu/api/v2/record/abc/123/#{endpoint.to_s.dasherize}\.json}).
+          to_return(status: 200, body: %Q({"success":true, "#{endpoint.to_s.dasherize}":[]}), headers: { 'Content-Type' => 'application/json' })
       end
 
-      context 'with params' do
-        subject { described_class.new(record_id, params) }
+      it "requests a record's #{endpoint.to_s.humanize.downcase} from the API" do
+        described_class.send(endpoint, { id: '/abc/123' })
+        expect(a_request(:get, %r{www\.europeana\.eu/api/v2/record/abc/123/#{endpoint.to_s.dasherize}\.json})).to have_been_made.once
+      end
 
-        it 'should not raise error' do
-          expect { subject }.to_not raise_error
-        end
-
-        it 'sets params attribute' do
-          expect(subject.instance_variable_get(:@params)).to eq(params)
-        end
+      it 'returns the body of the response' do
+        results = described_class.send(endpoint, { id: '/abc/123' })
+        expect(results).to be_an(OpenStruct)
+        expect(results).to respond_to(endpoint)
       end
     end
   end
 
-  describe '#id' do
-    subject { described_class.new(record_id) }
-    it 'gets id attribute' do
-      expect(subject.id).to eq(subject.instance_variable_get(:@id))
-    end
-  end
-
-  describe '#id=' do
-    subject { described_class.new(record_id) }
-
-    context 'with valid ID' do
-      it 'sets id attribute' do
-        subject.id = '/xyz/5678'
-        expect(subject.instance_variable_get(:@id)).to eq('/xyz/5678')
-      end
-    end
-
-    context 'invalid ID' do
-      it 'raises error' do
-        expect { subject.id = 'invalid' }.to raise_error('Invalid Europeana record ID: "invalid"')
-      end
-    end
-  end
-
-  describe '#params' do
-    subject { described_class.new(record_id, params) }
-    it 'gets params attribute' do
-      expect(subject.params).to eq(subject.instance_variable_get(:@params))
-    end
-  end
-
-  describe '#params=' do
-    subject { described_class.new(record_id, {}) }
-
-    context 'valid params' do
-      it 'sets params attribute' do
-        subject.params = params
-        expect(subject.instance_variable_get(:@params)).to eq(params)
-      end
-    end
-
-    it 'validates param names' do
-      expect { subject.params = { invalid: 'parameter' } }.to raise_error(/Unknown key: :?invalid/)
-    end
-  end
-
-  describe '#params_with_authentication' do
-    subject { described_class.new(record_id, params) }
-
-    context 'with API key' do
-      it 'adds API key to params' do
-        expect(subject.params_with_authentication).to eq(params.merge(wskey: api_key))
-      end
-    end
-
-    context 'without API key' do
-      it 'raises an error' do
-        Europeana::API.api_key = nil
-        expect { subject.params_with_authentication }.to raise_error(Europeana::API::Errors::MissingAPIKeyError)
-      end
-    end
-  end
-
-  describe '#request_uri' do
-    subject { described_class.new(record_id, params) }
-
-    it 'returns a URI' do
-      expect(subject.request_uri).to be_a(URI)
-    end
-
-    it 'includes the record ID' do
-      expect(subject.request_uri.to_s).to include(record_id)
-    end
-
-    it 'includes the query params' do
-      expect(subject.request_uri.to_s).to include(params.to_query)
-    end
-  end
-
-  describe '#fetch' do
-    subject { described_class.new(record_id, params).fetch }
-    it_behaves_like 'record request'
-  end
-
-  describe '#hierarchy' do
-    let(:record) { described_class.new(record_id, params) }
-    subject { record.hierarchy }
-    it { is_expected.to be_a(Europeana::Record::Hierarchy) }
+  describe '.escape' do
+    it 'escapes Lucene characters'
   end
 end
