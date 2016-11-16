@@ -11,9 +11,10 @@ module Europeana
       end
 
       class_methods do
+        # @todo path is not optional; ensure that it exists
         def has_api_endpoint(name, **options)
           self.api_endpoints ||= {}
-          self.api_endpoints[name] = options.reverse_merge(class: self)
+          self.api_endpoints[name] = options
 
           define_singleton_method(name) do |**params|
             api_request_for_endpoint(name, **params).execute
