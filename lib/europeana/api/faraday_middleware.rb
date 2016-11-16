@@ -15,12 +15,12 @@ module Europeana
       autoload :ParseJsonToOpenStruct, 'europeana/api/faraday_middleware/response/parse_json_to_open_struct'
 
       Faraday::Request.register_middleware \
-        authenticated_request: lambda { AuthenticatedRequest },
-        parameter_repetition: lambda { ParameterRepetition }
+        authenticated_request: -> { AuthenticatedRequest },
+        parameter_repetition: -> { ParameterRepetition }
 
       Faraday::Response.register_middleware \
-        html: lambda { HandleHtml },
-        json_openstruct: lambda { ParseJsonToOpenStruct }
+        html: -> { HandleHtml },
+        json_openstruct: -> { ParseJsonToOpenStruct }
     end
   end
 end

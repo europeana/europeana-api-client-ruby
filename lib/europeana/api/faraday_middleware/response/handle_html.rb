@@ -12,7 +12,7 @@ module Europeana
 
           if env[:status] == 404
             fail Faraday::ResourceNotFound, env
-          elsif (400..599).include?(env[:status])
+          elsif (400..599).cover?(env[:status])
             fail Faraday::ClientError, env
           else
             fail Faraday::ParsingError, "API responded with HTML and status #{env[:status]}"

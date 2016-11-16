@@ -45,7 +45,7 @@ module Europeana
       attr_writer :logger
 
       def logger
-        @logger ||= (defined?(Rails) && Rails.logger) ? Rails.logger : Logger.new(STDOUT)
+        @logger ||= defined?(Rails) && Rails.logger ? Rails.logger : Logger.new(STDOUT)
       end
 
       def in_parallel(&block)
