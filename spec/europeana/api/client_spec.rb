@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 RSpec.describe Europeana::API::Client do
   describe '.get' do
     context 'without URL' do
@@ -19,7 +20,7 @@ RSpec.describe Europeana::API::Client do
       context 'when request fails' do
         it 'retries up to 5 times' do
           url = 'http://www.example.com/'
-          stub_request(:get, Regexp.new(url)).to_timeout.times(3).to_return({body: 'OK'})
+          stub_request(:get, Regexp.new(url)).to_timeout.times(3).to_return(body: 'OK')
 
           subject.get(url)
           expect(a_request(:get, Regexp.new(url))).to have_been_made.times(4)

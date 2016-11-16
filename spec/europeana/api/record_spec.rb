@@ -49,16 +49,16 @@ RSpec.describe Europeana::API::Record do
     describe ".#{endpoint}" do
       before do
         stub_request(:get, %r{://www\.europeana\.eu/api/v2/record/abc/123/#{endpoint.to_s.dasherize}\.json}).
-          to_return(status: 200, body: %Q({"success":true, "#{endpoint.to_s.dasherize}":[]}), headers: { 'Content-Type' => 'application/json' })
+          to_return(status: 200, body: %({"success":true, "#{endpoint.to_s.dasherize}":[]}), headers: { 'Content-Type' => 'application/json' })
       end
 
       it "requests a record's #{endpoint.to_s.humanize.downcase} from the API" do
-        described_class.send(endpoint, { id: '/abc/123' })
+        described_class.send(endpoint, id: '/abc/123')
         expect(a_request(:get, %r{www\.europeana\.eu/api/v2/record/abc/123/#{endpoint.to_s.dasherize}\.json})).to have_been_made.once
       end
 
       it 'returns the body of the response' do
-        results = described_class.send(endpoint, { id: '/abc/123' })
+        results = described_class.send(endpoint, id: '/abc/123')
         expect(results).to be_an(OpenStruct)
         expect(results).to respond_to(endpoint)
       end

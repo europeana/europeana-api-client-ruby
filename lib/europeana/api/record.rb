@@ -9,11 +9,11 @@ module Europeana
       include Resource
 
       has_api_endpoint :search,
-        path: '/v2/search.json',
-        errors: {
-          'Invalid query parameter' => Errors::RequestError,
-          /1000 search results/ => Errors::PaginationError
-        }
+                        path: '/v2/search.json',
+                        errors: {
+                          'Invalid query parameter' => Errors::RequestError,
+                          /1000 search results/ => Errors::PaginationError
+                        }
       has_api_endpoint :get, path: '/v2/record/%{id}.json'
 
       # Hierarchies
@@ -33,7 +33,7 @@ module Europeana
         # @return [String] Escaped text
         def escape(text)
           fail ArgumentError, "Expected String, got #{text.class}" unless text.is_a?(String)
-          specials = %w<\\ + - & | ! ( ) { } [ ] ^ " ~ * ? : / >
+          specials = %w<\\ + - & | ! ( ) { } [ ] ^ " ~ * ? : />
           specials.each_with_object(text.dup) do |char, unescaped|
             unescaped.gsub!(char, '\\\\' + char) # prepends *one* backslash
           end

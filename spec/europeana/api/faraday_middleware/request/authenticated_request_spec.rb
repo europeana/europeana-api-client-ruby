@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 RSpec.describe Europeana::API::FaradayMiddleware::AuthenticatedRequest do
   context 'with `Europeana::API.api_key` set' do
     context 'without `wskey` param' do

@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-RSpec.shared_examples 'a resource with API endpoint' do |endpoint, url_params|
+RSpec.shared_examples 'a resource with API endpoint' do |endpoint|
   subject { described_class }
 
   it { is_expected.to respond_to(endpoint) }

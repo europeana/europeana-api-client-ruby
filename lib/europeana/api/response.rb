@@ -27,8 +27,8 @@ module Europeana
       def validate_generic_errors!
         fail Errors::ResourceNotFoundError, body[:error] if status == 404
         fail Errors::MissingAPIKeyError, body[:error] if status == 403 && body[:error] =~ /No API key/
-        fail Errors::ClientError, body[:error] if (400..499).include?(status)
-        fail Errors::ServerError, body[:error] if (400..499).include?(status)
+        fail Errors::ClientError, body[:error] if (400..499).cover?(status)
+        fail Errors::ServerError, body[:error] if (400..499).cover?(status)
       end
     end
   end

@@ -22,7 +22,7 @@ RSpec.describe Europeana::API::Resource do
     it 'registers API endpoint method on class' do
       resource_class.has_api_endpoint(:fish, path: '/go/fish')
       expect(resource_class.api_endpoints).to have_key(:fish)
-      expect(resource_class.api_endpoints[:fish]).to eq({ path: '/go/fish' })
+      expect(resource_class.api_endpoints[:fish]).to eq(path: '/go/fish')
       expect(resource_class).to respond_to(:fish)
     end
 
@@ -37,7 +37,7 @@ RSpec.describe Europeana::API::Resource do
 
   describe '#api_request_for_endpoint' do
     it 'builds a request for the endpoint' do
-      resource_class.has_api_endpoint(:fish, { path: '/go/fish' })
+      resource_class.has_api_endpoint(:fish, path: '/go/fish')
       request = resource_class.api_request_for_endpoint(:fish, with: 'rod')
       expect(request).to be_a(Europeana::API::Request)
       expect(request.params).to eq(with: 'rod')
