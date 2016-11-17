@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 RSpec.describe Europeana::API::Record do
-  it_behaves_like 'a resource with API endpoint', :get
+  it_behaves_like 'a resource with API endpoint', :fetch
   it_behaves_like 'a resource with API endpoint', :search
   it_behaves_like 'a resource with API endpoint', :self
   it_behaves_like 'a resource with API endpoint', :parent
@@ -9,19 +9,19 @@ RSpec.describe Europeana::API::Record do
   it_behaves_like 'a resource with API endpoint', :preceding_siblings
   it_behaves_like 'a resource with API endpoint', :ancestor_self_siblings
 
-  describe '.get' do
+  describe '.fetch' do
     before do
       stub_request(:get, %r{://www\.europeana\.eu/api/v2/record/abc/123\.json}).
         to_return(status: 200, body: '{"success":true, "object":{}}', headers: { 'Content-Type' => 'application/json' })
     end
 
     it 'requests a record from the API' do
-      described_class.get(id: '/abc/123')
+      described_class.fetch(id: '/abc/123')
       expect(a_request(:get, %r{www\.europeana\.eu/api/v2/record/abc/123\.json})).to have_been_made.once
     end
 
     it 'returns the body of the response' do
-      record = described_class.get(id: '/abc/123')
+      record = described_class.fetch(id: '/abc/123')
       expect(record).to be_an(OpenStruct)
       expect(record).to respond_to(:object)
     end

@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 RSpec.describe Europeana::API::Annotation do
-  it_behaves_like 'a resource with API endpoint', :get
+  it_behaves_like 'a resource with API endpoint', :fetch
   it_behaves_like 'a resource with API endpoint', :search
 
-  describe '.get' do
+  describe '.fetch' do
     before do
       stub_request(:get, %r{://www.europeana.eu/api/annotations/abc/123}).
         to_return(status: 200,
@@ -12,12 +12,12 @@ RSpec.describe Europeana::API::Annotation do
     end
 
     it 'requests an annotation from the API' do
-      described_class.get(provider: 'abc', id: '123')
+      described_class.fetch(provider: 'abc', id: '123')
       expect(a_request(:get, %r{www.europeana.eu/api/annotations/abc/123})).to have_been_made.once
     end
 
     it 'returns the body of the response' do
-      record = described_class.get(provider: 'abc', id: '123')
+      record = described_class.fetch(provider: 'abc', id: '123')
       expect(record).to be_an(OpenStruct)
       expect(record).to respond_to(:body)
     end

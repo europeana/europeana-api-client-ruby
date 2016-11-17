@@ -9,7 +9,7 @@ module Europeana
       include Resource
 
       has_api_endpoint :search, path: '/annotations/search'
-      has_api_endpoint :get, path: '/annotations/%{provider}/%{id}'
+      has_api_endpoint :fetch, path: '/annotations/%{provider}/%{id}'
     end
   end
 end
