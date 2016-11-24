@@ -12,7 +12,7 @@ module Europeana
       ##
       # @param endpoint [Hash] endpoint options
       # @param params [Hash]
-      def initialize(endpoint, **params)
+      def initialize(endpoint, params = {})
         @endpoint = endpoint
         @params = params.dup
         @api_url = @params.delete(:api_url)
@@ -21,7 +21,7 @@ module Europeana
       ##
       # @return [Response]
       def execute
-        faraday_response = client.get(url, **query_params)
+        faraday_response = client.get(url, query_params)
         response = Response.new(self, faraday_response)
         return response if client.in_parallel?
 
@@ -30,7 +30,7 @@ module Europeana
       end
 
       def url
-        build_api_url(**format_params)
+        build_api_url(format_params)
       end
 
       def client
