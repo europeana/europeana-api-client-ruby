@@ -5,6 +5,10 @@
 Ruby client library for the search and retrieval of records from the [Europeana
 REST API](http://labs.europeana.eu/api/introduction/).
 
+## Requirements
+
+* Ruby >= 2.2.2
+
 ## Installation
 
 Add this line to your application's Gemfile:
