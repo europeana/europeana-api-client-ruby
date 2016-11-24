@@ -16,13 +16,13 @@ module Europeana
           self.api_endpoints ||= {}
           self.api_endpoints[name] = options
 
-          define_singleton_method(name) do |**params|
-            api_request_for_endpoint(name, **params).execute
+          define_singleton_method(name) do |params|
+            api_request_for_endpoint(name, params || {}).execute
           end
         end
 
-        def api_request_for_endpoint(name, **params)
-          Request.new(self.api_endpoints[name], **params)
+        def api_request_for_endpoint(name, params = {})
+          Request.new(self.api_endpoints[name], params)
         end
       end
     end

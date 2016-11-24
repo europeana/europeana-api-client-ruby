@@ -30,7 +30,7 @@ RSpec.describe Europeana::API::Resource do
       resource_class.has_api_endpoint(:fish, path: '/go/fish')
       stub_request(:get, %r{://www.europeana.eu/api/go/fish}).
         to_return(status: 200, body: '{"catch":[]}', headers: { 'Content-Type' => 'application/json' })
-      resource_class.fish(with: 'rod')
+      resource_class.fish(with: 'rod', 'without' => 'net')
       expect(a_request(:get, %r{www.europeana.eu/api/go/fish})).to have_been_made.once
     end
   end
