@@ -51,7 +51,7 @@ module Europeana
         @endpoint_path_format_keys ||= endpoint[:path].scan(/%\{(.*?)\}/).flatten.map(&:to_sym)
       end
 
-      def build_api_url(**params)
+      def build_api_url(params = {})
         request_path = format(endpoint[:path], params)
         if api_url.nil?
           request_path.sub(%r{\A/}, '') # remove leading slash for relative URLs
