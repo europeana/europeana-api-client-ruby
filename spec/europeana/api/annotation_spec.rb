@@ -3,6 +3,18 @@ RSpec.describe Europeana::API::Annotation do
   it_behaves_like 'a resource with API endpoint', :fetch
   it_behaves_like 'a resource with API endpoint', :search
 
+  before(:all) do
+    Europeana::API.configure do |config|
+      config.parse_json_to = OpenStruct
+    end
+  end
+
+  after(:all) do
+    Europeana::API.configure do |config|
+      config.parse_json_to = Hash
+    end
+  end
+
   describe '.fetch' do
     before do
       stub_request(:get, %r{://www.europeana.eu/api/annotations/abc/123}).

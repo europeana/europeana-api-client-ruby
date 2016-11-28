@@ -9,6 +9,18 @@ RSpec.describe Europeana::API::Record do
   it_behaves_like 'a resource with API endpoint', :preceding_siblings
   it_behaves_like 'a resource with API endpoint', :ancestor_self_siblings
 
+  before(:all) do
+    Europeana::API.configure do |config|
+      config.parse_json_to = OpenStruct
+    end
+  end
+
+  after(:all) do
+    Europeana::API.configure do |config|
+      config.parse_json_to = Hash
+    end
+  end
+
   describe '.fetch' do
     before do
       stub_request(:get, %r{://www\.europeana\.eu/api/v2/record/abc/123\.json}).

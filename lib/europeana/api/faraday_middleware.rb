@@ -12,7 +12,7 @@ module Europeana
       autoload :ParameterRepetition, 'europeana/api/faraday_middleware/request/parameter_repetition'
 
       autoload :HandleHtml, 'europeana/api/faraday_middleware/response/handle_html'
-      autoload :ParseJsonToOpenStruct, 'europeana/api/faraday_middleware/response/parse_json_to_open_struct'
+      autoload :ParseJsonToVarious, 'europeana/api/faraday_middleware/response/parse_json_to_various'
 
       Faraday::Request.register_middleware \
         authenticated_request: -> { AuthenticatedRequest },
@@ -20,7 +20,7 @@ module Europeana
 
       Faraday::Response.register_middleware \
         html: -> { HandleHtml },
-        json_openstruct: -> { ParseJsonToOpenStruct }
+        json_various: -> { ParseJsonToVarious }
     end
   end
 end

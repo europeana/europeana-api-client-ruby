@@ -8,11 +8,18 @@ module Europeana
       ##
       # Handles JSON parsing of API responses
       #
-      # Returns each object not as a `Hash` but as an `OpenStruct`.
+      # Returns the response as either a `Hash` (default) or an `OpenStruct`.
       #
-      # Changes "-" in JSON field keys to "_", so that they become methods
-      # on the `OpenStruct`.
-      class ParseJsonToOpenStruct < ::FaradayMiddleware::ResponseMiddleware
+      # To set the response format to be `OpenStruct`:
+      # ```ruby
+      # Europeana::API.configure do |config|
+      #   config.parse_json_to = OpenStruct
+      # end
+      # ```
+      #
+      # If using `OpenStruct`, changes "-" in JSON field keys to "_", so that
+      # they become methods.
+      class ParseJsonToVarious < ::FaradayMiddleware::ResponseMiddleware
         dependency do
           require 'json' unless defined?(JSON)
         end
@@ -20,9 +27,13 @@ module Europeana
         define_parser do |body|
           unless body.strip.empty?
             hash = JSON.parse(body)
-            underscored_hash = underscore_hash_keys(hash)
-            underscored_body = underscored_hash.to_json
-            JSON.parse(underscored_body, object_class: OpenStruct)
+            if Europeana::API.configuration.parse_json_to == OpenStruct
+              underscored_hash = underscore_hash_keys(hash)
+              underscored_body = underscored_hash.to_json
+              JSON.parse(underscored_body, object_class: OpenStruct)
+            else
+              hash
+            end
           end
         end
 

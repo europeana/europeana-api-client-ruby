@@ -44,8 +44,16 @@ module Europeana
       # @return [Logger]
       attr_writer :logger
 
+      def configuration
+        @configuration ||= Configuration.new
+      end
+
       def logger
         @logger ||= defined?(Rails) && Rails.logger ? Rails.logger : Logger.new(STDOUT)
+      end
+
+      def configure
+        yield(configuration)
       end
 
       def in_parallel(&block)
@@ -60,6 +68,14 @@ module Europeana
 
       def record
         Record
+      end
+    end
+
+    class Configuration
+      attr_accessor :parse_json_to
+
+      def initialize
+        @parse_json_to = Hash
       end
     end
   end
