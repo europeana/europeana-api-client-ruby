@@ -13,11 +13,7 @@ module Europeana
         @queue = Queue.new(self)
       end
 
-      ##
-      # @return [Faraday::Response]
-      def get(url, params = {}, headers = nil)
-        connection.get(url, params, headers)
-      end
+      delegate :get, to: :connection
 
       def in_parallel?
         @queue.present?
