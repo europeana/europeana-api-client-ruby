@@ -17,7 +17,7 @@ module Europeana
         @items.present?
       end
 
-      def request(resource, method, **params)
+      def add(resource, method, **params)
         @items << Item.new(resource, method, **params)
       end
 

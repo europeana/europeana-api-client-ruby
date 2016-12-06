@@ -59,7 +59,7 @@ module Europeana
 
       def in_parallel(&block)
         client = Client.new
-        client.queue.instance_eval(&block)
+        yield client.queue
         client.queue.run
       end
 
