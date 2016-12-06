@@ -14,6 +14,7 @@ require 'europeana/api'
 # Pry.start
 
 Europeana::API.key = ENV['EUROPEANA_API_KEY']
+Europeana::API.url = ENV['EUROPEANA_API_URL'] if ENV['EUROPEANA_API_URL']
 
 require 'irb'
 IRB.start
