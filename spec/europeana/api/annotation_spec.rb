@@ -2,6 +2,7 @@
 RSpec.describe Europeana::API::Annotation do
   it_behaves_like 'a resource with API endpoint', :fetch
   it_behaves_like 'a resource with API endpoint', :search
+  it_behaves_like 'a resource with API endpoint', :create
 
   before(:all) do
     Europeana::API.configure do |config|

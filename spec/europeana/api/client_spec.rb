@@ -1,9 +1,14 @@
 # frozen_string_literal: true
 RSpec.describe Europeana::API::Client do
+  it { should delegate_method(:get).to(:connection) }
+  it { should delegate_method(:post).to(:connection) }
+
   describe '.get' do
     context 'without URL' do
-      it 'fails' do
-        expect { subject.get }.to raise_error(ArgumentError)
+      it 'makes a request to the root API URL' do
+        stub_request(:get, Regexp.new(Europeana::API.url))
+        subject.get
+        expect(a_request(:get, Regexp.new(Europeana::API.url))).to have_been_made.once
       end
     end
 

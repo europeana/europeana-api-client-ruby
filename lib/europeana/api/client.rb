@@ -13,7 +13,7 @@ module Europeana
         @queue = Queue.new(self)
       end
 
-      delegate :get, to: :connection
+      delegate :get, :post, to: :connection
 
       def in_parallel?
         @queue.present?
