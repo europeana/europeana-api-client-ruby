@@ -46,14 +46,13 @@ module Europeana
         @body = @params.delete(:body) unless http_method == :get
       end
 
-
-      def faraday_response(&block)
+      def faraday_response
         client.send(http_method) do |request|
           request.url(url)
           request.params = query_params
           request.headers.merge!(endpoint[:headers] || {}).merge!(headers || {})
           request.body = body unless http_method == :get
-          block.call(request) if block_given?
+          yield(request) if block_given?
           # logger.debug("API request: #{request.inspect}")
         end
       end
