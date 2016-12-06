@@ -7,6 +7,8 @@ module Europeana
       attr_reader :endpoint
       attr_reader :params
       attr_reader :api_url
+      attr_reader :headers
+      attr_reader :body
       attr_writer :client
 
       ##
@@ -15,14 +17,13 @@ module Europeana
       def initialize(endpoint, params = {})
         @endpoint = endpoint
         @params = params.dup
-        @api_url = @params.delete(:api_url)
+        extract_special_params
       end
 
       ##
       # @return [Response]
-      def execute
-        faraday_response = client.get(url, query_params)
-        response = Response.new(self, faraday_response)
+      def execute(&block)
+        response = Response.new(self, faraday_response(&block))
         return response if client.in_parallel?
 
         response.validate!
@@ -38,6 +39,31 @@ module Europeana
       end
 
       protected
+
+      def extract_special_params
+        @api_url = @params.delete(:api_url)
+        @headers = @params.delete(:headers)
+        @body = @params.delete(:body) unless http_method == :get
+      end
+
+      def faraday_response
+        client.send(http_method) do |request|
+          request.url(url)
+          request.params = query_params
+          request.headers.merge!(endpoint[:headers] || {}).merge!(headers || {})
+          request.body = body unless http_method == :get
+          yield(request) if block_given?
+          # logger.debug("API request: #{request.inspect}")
+        end
+      end
+
+      def logger
+        Europeana::API.logger
+      end
+
+      def http_method
+        endpoint[:method] || :get
+      end
 
       def format_params
         params.slice(*endpoint_path_format_keys)

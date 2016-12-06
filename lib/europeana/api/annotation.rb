@@ -10,6 +10,8 @@ module Europeana
 
       has_api_endpoint :search, path: '/annotations/search'
       has_api_endpoint :fetch, path: '/annotations/%{provider}/%{id}'
+      has_api_endpoint :create, method: :post, path: '/annotations/',
+                                headers: { 'Content-Type' => 'application/ld+json' }
     end
   end
 end
