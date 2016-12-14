@@ -19,6 +19,7 @@ module Europeana
   module API
     autoload :Annotation, 'europeana/api/annotation'
     autoload :Client, 'europeana/api/client'
+    autoload :Entity, 'europeana/api/entity'
     autoload :Errors, 'europeana/api/errors'
     autoload :FaradayMiddleware, 'europeana/api/faraday_middleware'
     autoload :Queue, 'europeana/api/queue'
@@ -69,6 +70,10 @@ module Europeana
 
       def record
         Record
+      end
+
+      def entity
+        Entity
       end
     end
 
