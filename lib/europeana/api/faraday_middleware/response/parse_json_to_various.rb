@@ -32,7 +32,7 @@ module Europeana
               underscored_body = underscored_hash.to_json
               JSON.parse(underscored_body, object_class: OpenStruct)
             else
-              hash
+              hash.with_indifferent_access
             end
           end
         end
