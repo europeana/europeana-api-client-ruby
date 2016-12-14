@@ -28,7 +28,7 @@ module Europeana
         fail Errors::ResourceNotFoundError.new(faraday_response), body[:error] if status == 404
         fail Errors::MissingAPIKeyError.new(faraday_response), body[:error] if status == 403 && body[:error] =~ /No API key/
         fail Errors::ClientError.new(faraday_response), body[:error] if (400..499).cover?(status)
-        fail Errors::ServerError.new(faraday_response), body[:error] if (400..499).cover?(status)
+        fail Errors::ServerError.new(faraday_response), body[:error] if (500..599).cover?(status)
       end
     end
   end

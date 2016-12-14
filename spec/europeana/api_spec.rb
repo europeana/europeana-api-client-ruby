@@ -39,4 +39,9 @@ describe Europeana::API do
     subject { described_class.annotation }
     it { is_expected.to eq(Europeana::API::Annotation) }
   end
+
+  describe '.entity' do
+    subject { described_class.entity }
+    it { is_expected.to eq(Europeana::API::Entity) }
+  end
 end
