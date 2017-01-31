@@ -14,11 +14,11 @@ module Europeana
                          'Invalid query parameter' => Errors::RequestError,
                          /1000 search results/ => Errors::PaginationError
                        }
-      has_api_endpoint :fetch, path: '/v2/record/%{id}.json'
+      has_api_endpoint :fetch, path: '/v2/record%{id}.json'
 
       # Hierarchies
       %w(self parent children preceding_siblings following_siblings ancestor_self_siblings).each do |hierarchical|
-        has_api_endpoint hierarchical.to_sym, path: "/v2/record/%{id}/#{hierarchical.dasherize}.json"
+        has_api_endpoint hierarchical.to_sym, path: "/v2/record%{id}/#{hierarchical.dasherize}.json"
       end
 
       class << self
