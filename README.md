@@ -44,14 +44,26 @@ require 'europeana/api'
 Europeana::API.key = 'xyz'
 ```
 
+### Response format
+
+Responses from the API methods described below will by default be hashes with
+indifferent access, i.e. values can be retrieved by string or symbol keys.
+
+To have API methods return objects instead:
+```ruby
+Europeana::API.configure do |config|
+  config.parse_json_to = OpenStruct
+end
+```
+
 ### Records
 
 #### Search
 
 ```ruby
 search = Europeana::API.record.search(query: '"first world war"')
-search.items # => [ item1, item2, ... ]
-search.totalResults # => 81530
+search[:items] # => [ item1, item2, ... ]
+search[:totalResults] # => 81530
 ```
 
 See http://labs.europeana.eu/api/search/ for details of the available request
@@ -61,8 +73,8 @@ parameters, and of the data returned in the search response.
 
 ```ruby
 record = Europeana::API.record.fetch(id: '/92070/BibliographicResource_1000126223918')
-record.object.title # => ["Panorama des Schafberges in Ober-Österreich. Blatt 1"]
-record.object.proxies.first.dcCreator.def # => ["Simony, Friedrich"]
+record[:object][:title] # => ["Panorama des Schafberges in Ober-Österreich. Blatt 1"]
+record[:object][:proxies].first[:dcCreator][:def] # => ["Simony, Friedrich"]
 ```
 
 See http://labs.europeana.eu/api/record/ for details of the data returned in
@@ -72,7 +84,7 @@ the record response.
 
 ```ruby
 hierarchy = Europeana::API.record.parent(id: '/2048604/data_item_onb_abo__2BZ17084070X')
-hierarchy.parent.id # => "/2048604/data_item_onb_abo_AC10352829"
+hierarchy[:parent][:id] # => "/2048604/data_item_onb_abo_AC10352829"
 ```
 
 Methods available for hierarchy retrieval:
@@ -99,14 +111,14 @@ received from the Annotations API methods.
 
 ```ruby
 search = Europeana::API.annotation.search(query: 'music')
-search.items.first # => "http://data.europeana.eu/annotation/collections/8"
+search[:items].first # => "http://data.europeana.eu/annotation/collections/8"
 ```
 
 #### Fetch
 
 ```ruby
 annotation = Europeana::API.annotation.fetch(provider: 'collections', id: 8)
-annotation.body # => "Sheet music"
+annotation[:body] # => "Sheet music"
 ```
 
 ## License
