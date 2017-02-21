@@ -1,8 +1,10 @@
 # frozen_string_literal: true
 RSpec.describe Europeana::API::Annotation do
-  it_behaves_like 'a resource with API endpoint', :fetch
-  it_behaves_like 'a resource with API endpoint', :search
-  it_behaves_like 'a resource with API endpoint', :create
+  it_behaves_like 'a resource with API endpoint', :fetch, :get
+  it_behaves_like 'a resource with API endpoint', :search, :get
+  it_behaves_like 'a resource with API endpoint', :create, :post
+  it_behaves_like 'a resource with API endpoint', :update, :put
+  it_behaves_like 'a resource with API endpoint', :delete, :delete
 
   before(:all) do
     Europeana::API.configure do |config|
@@ -53,6 +55,23 @@ RSpec.describe Europeana::API::Annotation do
       results = described_class.search(query: '*:*')
       expect(results).to be_an(OpenStruct)
       expect(results).to respond_to(:items)
+    end
+  end
+
+  describe '.delete' do
+    before do
+      stub_request(:delete, %r{://www.europeana.eu/api/annotations/abc/123}).
+        to_return(status: 204, body: '')
+    end
+
+    it 'deletes an annotation from the API' do
+      described_class.delete(provider: 'abc', id: '123')
+      expect(a_request(:delete, %r{www.europeana.eu/api/annotations/abc/123})).to have_been_made.once
+    end
+
+    it 'returns the empty body of the response' do
+      record = described_class.delete(provider: 'abc', id: '123')
+      expect(record).to eq('')
     end
   end
 end

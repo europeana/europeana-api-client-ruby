@@ -9,11 +9,11 @@ module Europeana
     class Client
       attr_reader :queue
 
+      delegate :get, :post, :put, :delete, :head, :patch, :options, to: :connection
+
       def initialize
         @queue = Queue.new(self)
       end
-
-      delegate :get, :post, to: :connection
 
       def in_parallel?
         @queue.present?
