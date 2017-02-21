@@ -7,6 +7,8 @@ module Europeana
       delegate :body, :headers, :status, to: :faraday_response
       delegate :endpoint, to: :request
 
+      # @param request [Europeana::API::Request]
+      # @param faraday_response [Faraday::Response]
       def initialize(request, faraday_response)
         @request = request
         @faraday_response = faraday_response

@@ -105,8 +105,6 @@ hierarchy methods and their responses.
 See http://labs.europeana.eu/api/annotations-methods for details of the responses
 received from the Annotations API methods.
 
-*NB:* at present, this API client only supports search and fetch of annotations.
-
 #### Search
 
 ```ruby
@@ -119,6 +117,28 @@ search[:items].first # => "http://data.europeana.eu/annotation/collections/8"
 ```ruby
 annotation = Europeana::API.annotation.fetch(provider: 'collections', id: 8)
 annotation[:body] # => "Sheet music"
+```
+
+#### Create
+
+```ruby
+body = { bodyValue: 'Trombones', motivation: 'tagging', target: 'http://data.europeana.eu/item/09102/_UEDIN_214' }
+annotation = Europeana::API.annotation.create(userToken: 'secret-token', body: body.to_json)
+annotation[:id] # => "http://www.europeana.eu/api/annotations/myname/1234"
+```
+
+#### Update
+
+```ruby
+body = { bodyValue: 'Trombones', motivation: 'tagging' }
+annotation = Europeana::API.annotation.update(provider: 'myname', id: '1234', userToken: 'secret-token', body: body.to_json)
+annotation[:body][:value] # => "Trombones"
+```
+
+#### Delete
+
+```ruby
+Europeana::API.annotation.delete(provider: 'myname', id: '1234', userToken: 'secret-token') # => ""
 ```
 
 ## License
