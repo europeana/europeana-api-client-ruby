@@ -38,7 +38,7 @@ module Europeana
                                               Faraday::Error::TimeoutError, EOFError]
 
             conn.response :json_various, content_type: /\bjson$/
-            conn.response :html, content_type: /\bhtml$/
+            conn.response :text, content_type: %r{^text(\b[^/]+)?/(plain|html)$}
 
             conn.adapter :typhoeus
             conn.url_prefix = Europeana::API.url
