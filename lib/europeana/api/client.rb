@@ -34,8 +34,8 @@ module Europeana
             conn.request :parameter_repetition
             conn.request :authenticated_request
             conn.request :retry, max: 5, interval: 3,
-                                 exceptions: [Errno::ECONNREFUSED, Errno::ETIMEDOUT, 'Timeout::Error',
-                                              Faraday::Error::TimeoutError, EOFError]
+                                 exceptions: [Errno::ECONNREFUSED, Errno::ETIMEDOUT, 'Timeout::Error', EOFError]
+            conn.options.timeout = 45
 
             conn.response :json_various, content_type: /\bjson$/
             conn.response :text, content_type: %r{^text(\b[^/]+)?/(plain|html)$}
