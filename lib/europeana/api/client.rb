@@ -34,7 +34,8 @@ module Europeana
             conn.request :parameter_repetition
             conn.request :authenticated_request
             conn.request :retry, max: 5, interval: 3,
-                                 exceptions: [Errno::ECONNREFUSED, Errno::ETIMEDOUT, 'Timeout::Error', EOFError]
+                                 exceptions: [Errno::ECONNREFUSED, EOFError]
+            conn.options.open_timeout = 5
             conn.options.timeout = 45
 
             conn.response :json_various, content_type: /\bjson$/
