@@ -33,8 +33,8 @@ module Europeana
             conn.request :instrumentation
             conn.request :parameter_repetition
             conn.request :authenticated_request
-            conn.request :retry, max: 5, interval: 3,
-                                 exceptions: [Errno::ECONNREFUSED, EOFError]
+            conn.request :retry, max: 5, interval: 3, exceptions: [Errno::ECONNREFUSED, EOFError]
+
             conn.options.open_timeout = 5
             conn.options.timeout = 45
 
