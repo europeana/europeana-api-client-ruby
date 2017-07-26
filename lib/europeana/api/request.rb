@@ -1,50 +1,89 @@
-require 'active_support/benchmarkable'
-require 'net/http'
-
+# frozen_string_literal: true
 module Europeana
   module API
     ##
-    # Europeana API request
+    # An API request
     class Request
-      include ActiveSupport::Benchmarkable
+      attr_reader :endpoint
+      attr_reader :params
+      attr_reader :api_url
+      attr_reader :headers
+      attr_reader :body
+      attr_writer :client
 
-      # Request URI
-      attr_reader :uri
-
-      # API response
-      attr_reader :response
-
-      # @param [URI]
-      def initialize(uri)
-        @uri = uri
+      ##
+      # @param endpoint [Hash] endpoint options
+      # @param params [Hash]
+      def initialize(endpoint, params = {})
+        @endpoint = endpoint
+        @params = params.dup
+        extract_special_params
       end
 
-      # @return (see Net::HTTP#request)
-      def execute
-        http = Net::HTTP.new(uri.host, uri.port)
-        http.use_ssl = (uri.scheme == 'https')
-        request = Net::HTTP::Get.new(uri.request_uri)
-        retries = Europeana::API.max_retries
+      ##
+      # @return [Response]
+      def execute(&block)
+        response = Response.new(self, faraday_response(&block))
+        return response if client.in_parallel?
 
-        begin
-          attempt = Europeana::API.max_retries - retries + 1
-          logger.info("[Europeana::API] Request URL: #{uri}")
-          benchmark("[Europeana::API] Request query (attempt ##{attempt})", level: :info) do
-            @response = http.request(request)
-          end
-        rescue Timeout::Error, Errno::ECONNREFUSED, EOFError
-          retries -= 1
-          raise unless retries > 0
-          logger.warn("[Europeana::API] Network error; sleeping #{Europeana::API.retry_delay}s")
-          sleep Europeana::API.retry_delay
-          retry
+        response.validate!
+        response.body
+      end
+
+      def url
+        build_api_url(format_params)
+      end
+
+      def client
+        @client ||= Client.new
+      end
+
+      protected
+
+      def extract_special_params
+        @api_url = @params.delete(:api_url)
+        @headers = @params.delete(:headers)
+        @body = @params.delete(:body) unless http_method == :get
+      end
+
+      def faraday_response
+        client.send(http_method) do |request|
+          request.url(url)
+          request.params = query_params
+          request.headers.merge!(endpoint[:headers] || {}).merge!(headers || {})
+          request.body = body unless http_method == :get
+          yield(request) if block_given?
+          # logger.debug("API request: #{request.inspect}")
         end
-
-        @response
       end
 
       def logger
         Europeana::API.logger
+      end
+
+      def http_method
+        endpoint[:method] || :get
+      end
+
+      def format_params
+        params.slice(*endpoint_path_format_keys)
+      end
+
+      def query_params
+        params.except(*endpoint_path_format_keys)
+      end
+
+      def endpoint_path_format_keys
+        @endpoint_path_format_keys ||= endpoint[:path].scan(/%\{(.*?)\}/).flatten.map(&:to_sym)
+      end
+
+      def build_api_url(params = {})
+        request_path = format(endpoint[:path], params)
+        if api_url.nil?
+          request_path.sub(%r{\A/}, '') # remove leading slash for relative URLs
+        else
+          api_url + request_path
+        end
       end
     end
   end

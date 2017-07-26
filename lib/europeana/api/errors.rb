@@ -1,60 +1,44 @@
+# frozen_string_literal: true
 module Europeana
   module API
     module Errors
+      class Base < StandardError
+        attr_reader :faraday_response
+
+        def initialize(faraday_response)
+          @faraday_response = faraday_response
+        end
+      end
+
       ##
       # Raised if API requests are attempted without the API key having been set.
-      #
-      # @todo Use one-line error messages (in backwards-incompatible version)
-      class MissingAPIKeyError < StandardError
-        def initialize(msg = nil)
-          msg ||= <<-MSG
-  Missing API key.
-
-  The Europeana API key has not been set.
-
-  Sign up for an API key at: http://labs.europeana.eu/api/registration/
-
-  Set the key with:
-
-    Europeana::API.api_key = "xyz"
-          MSG
-          super(msg)
-        end
+      class MissingAPIKeyError < Base
       end
 
       ##
       # Raised if the API response success flag is false, indicating a problem
       # with the request.
-      class RequestError < StandardError
-        def initialize(msg = nil)
-          msg ||= <<-MSG
-  Request error.
+      class RequestError < Base
+      end
 
-  There was a problem with your request to the Europeana API.
-          MSG
-          super(msg)
-        end
+      class ResourceNotFoundError < Base
+      end
+
+      class ClientError < Base
+      end
+
+      class ServerError < Base
       end
 
       ##
       # Raised if the API response is not valid JSON.
-      class ResponseError < StandardError
-        def initialize(msg = nil)
-          msg ||= <<-MSG
-  Response error.
-
-  Unable to parse the response from the Europeana API.
-          MSG
-          super(msg)
-        end
+      class ResponseError < Base
       end
 
-      module Request
-        ##
-        # Raised if the API response indicates invalid pagination params in
-        # the request.
-        class PaginationError < StandardError
-        end
+      ##
+      # Raised if the API response indicates invalid pagination params in
+      # the request.
+      class PaginationError < Base
       end
     end
   end

@@ -1,4 +1,5 @@
 # coding: utf-8
+# frozen_string_literal: true
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require 'europeana/api/version'
@@ -20,11 +21,21 @@ Gem::Specification.new do |spec|
 
   spec.required_ruby_version = '>= 2.0.0'
 
-  spec.add_dependency 'activesupport', '>= 3.0', '< 5'
+  spec.add_dependency 'activesupport', '>= 4.2', '< 6.0'
+  # Locked to < v0.12.2 due to incompatibility with v0.12.2
+  # TODO: resolve incompatibility and unlock
+  spec.add_dependency 'faraday', '~> 0.9', '< 0.12.2'
+  spec.add_dependency 'faraday_middleware'
   spec.add_dependency 'multi_json', '~> 1.0'
+  spec.add_dependency 'rack', '> 1.6.2'
+  spec.add_dependency 'typhoeus', '~> 1.1'
 
   spec.add_development_dependency 'bundler', '~> 1.3'
+  spec.add_development_dependency 'coveralls'
+  spec.add_development_dependency 'dotenv'
   spec.add_development_dependency 'rake'
   spec.add_development_dependency 'rspec', '~> 3.0'
+  spec.add_development_dependency 'rubocop', '0.39.0' # only update when Hound does
+  spec.add_development_dependency 'shoulda-matchers', '~> 3.1'
   spec.add_development_dependency 'webmock', '~> 1.18.0'
 end
