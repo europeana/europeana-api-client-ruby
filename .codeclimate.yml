@@ -1,5 +1,5 @@
 plugins:
   brakeman:
-    enabled: true
+    enabled: false
   rubocop:
     enabled: true

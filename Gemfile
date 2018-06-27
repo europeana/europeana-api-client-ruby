@@ -9,6 +9,5 @@ group :test do
 end
 
 group :test, :development do
-  gem 'brakeman'
   gem 'rubocop', '~> 0.53', require: false
 end
