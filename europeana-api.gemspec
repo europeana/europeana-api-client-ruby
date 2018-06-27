@@ -26,6 +26,7 @@ Gem::Specification.new do |spec|
   # TODO: resolve incompatibility and unlock
   spec.add_dependency 'faraday', '~> 0.9', '< 0.12.2'
   spec.add_dependency 'faraday_middleware'
+  spec.add_dependency 'iso-639', '~> 0.2.5'
   spec.add_dependency 'multi_json', '~> 1.0'
   spec.add_dependency 'rack', '> 1.6.2'
   spec.add_dependency 'typhoeus', '~> 1.1'
