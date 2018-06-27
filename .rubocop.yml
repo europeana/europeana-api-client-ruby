@@ -1,1 +1,4 @@
 inherit_from: ./.ruby-style.yml
+AllCops:
+  Exclude:
+    - 'app/models/rdf/vocab/*'
