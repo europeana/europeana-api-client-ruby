@@ -8,6 +8,8 @@ module Europeana
     class Record
       include Resource
 
+      autoload :LangMap, 'europeana/api/record/lang_map'
+
       has_api_endpoint :search,
                        path: '/v2/search.json',
                        errors: {
