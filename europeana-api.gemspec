@@ -19,7 +19,7 @@ Gem::Specification.new do |spec|
   spec.test_files    = spec.files.grep(/^(test|spec|features)\//)
   spec.require_paths = %w(lib)
 
-  spec.required_ruby_version = '>= 2.0.0'
+  spec.required_ruby_version = '>= 2.3.0'
 
   spec.add_dependency 'activesupport', '>= 4.2', '< 6.0'
   # Locked to < v0.12.2 due to incompatibility with v0.12.2
