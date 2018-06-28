@@ -55,7 +55,7 @@ module Europeana
           # Arrays will be recursed over, localising each element.
           #
           # @param lang_map [Object] Object to attempt to localise
-          # @return [Array<Object>] Localised value
+          # @return [Object,Array<Object>] Localised value
           def localise_lang_map(lang_map)
             if lang_map.is_a?(Array)
               return lang_map.map { |val| localise_lang_map(val) }
@@ -65,6 +65,7 @@ module Europeana
 
             lang_map_value(lang_map, ::I18n.locale.to_s) ||
               lang_map_value(lang_map, ::I18n.default_locale.to_s) ||
+              lang_map_value(lang_map, 'def') ||
               lang_map.values
           end
 
@@ -82,13 +83,14 @@ module Europeana
 
           protected
 
+          # @return [Array<String>] valid keys in the language map for the given locale
           def salient_lang_map_keys(lang_map, locale)
             iso_code = locale.split('-').first
             iso_locale = ISO_639.find(iso_code)
 
             # Favour exact matches
             keys = lang_map.keys.select do |k|
-              [locale, iso_locale.alpha2, iso_locale.alpha3].include?(k)
+              [locale, iso_locale&.alpha2, iso_locale&.alpha3].include?(k)
             end.flatten.compact
             return keys unless keys.blank?
 
