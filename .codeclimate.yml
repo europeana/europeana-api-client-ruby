@@ -1,0 +1,5 @@
+plugins:
+  brakeman:
+    enabled: false
+  rubocop:
+    enabled: true

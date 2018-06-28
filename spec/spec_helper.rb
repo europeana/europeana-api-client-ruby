@@ -1,12 +1,14 @@
 # frozen_string_literal: true
-require 'coveralls'
+
+# Generate Simplecov report
+require 'simplecov'
+SimpleCov.start
+
 require 'europeana/api'
 require 'shoulda/matchers'
 require 'webmock/rspec'
 
 Dir['./spec/support/**/*.rb'].each { |f| require f }
-
-Coveralls.wear! unless Coveralls.will_run?.nil?
 
 Europeana::API.logger.level = Logger::ERROR
 
