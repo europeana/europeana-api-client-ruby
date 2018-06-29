@@ -7,7 +7,7 @@ REST APIs](https://pro.europeana.eu/resources/apis).
 
 ## Requirements
 
-* Ruby >= 2.2.2
+* Ruby >= 2.3
 
 ## Installation
 

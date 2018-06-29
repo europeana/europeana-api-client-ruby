@@ -5,7 +5,7 @@ RSpec.describe Europeana::API::Record::LangMap do
     I18n.config.available_locales = %i(de en fr nl)
   end
   let(:lang_map_hash) do
-    { 'en' => 'this', 'fr' => 'ce' }
+    { 'def' => 'this', 'en' => 'this', 'fr' => 'ce' }
   end
   let(:non_lang_map_hash) do
     { 'first' => 'this', 'then' => 'that' }
@@ -78,8 +78,20 @@ RSpec.describe Europeana::API::Record::LangMap do
             before do
               I18n.default_locale = :nl
             end
-            it 'returns all values' do
-              expect(subject).to eq(var.values)
+
+            context 'when "def" is present' do
+              it 'is returned in array' do
+                expect(subject).to eq([var['def']])
+              end
+            end
+
+            context 'when "def" is not present' do
+              before do
+                lang_map_hash.delete('def')
+              end
+              it 'returns all values' do
+                expect(subject).to eq(var.values)
+              end
             end
           end
         end
