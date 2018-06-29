@@ -5,7 +5,7 @@ AllCops:
   - db/schema.rb
   - tmp/**/*
   UseCache: false
-  TargetRubyVersion: 2.5
+  TargetRubyVersion: 2.3
 Layout/DotPosition:
   Enabled: true
   EnforcedStyle: trailing
@@ -188,4 +188,3 @@ Style/VariableInterpolation:
   Enabled: false
 Style/WhenThen:
   Enabled: false
-
