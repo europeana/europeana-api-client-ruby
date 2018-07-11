@@ -1,13 +1,13 @@
 # Europeana API
 
-[![Build Status](https://travis-ci.org/europeana/europeana-api-client-ruby.svg?branch=develop)](https://travis-ci.org/europeana/europeana-api-client-ruby) [![Coverage Status](https://coveralls.io/repos/europeana/europeana-api-client-ruby/badge.svg?branch=develop&service=github)](https://coveralls.io/github/europeana/europeana-api-client-ruby?branch=develop) [![security](https://hakiri.io/github/europeana/europeana-api-client-ruby/develop.svg)](https://hakiri.io/github/europeana/europeana-api-client-ruby/develop) [![Dependency Status](https://gemnasium.com/europeana/europeana-api-client-ruby.svg)](https://gemnasium.com/europeana/europeana-api-client-ruby)
+[![Build Status](https://travis-ci.org/europeana/europeana-api-client-ruby.svg?branch=develop)](https://travis-ci.org/europeana/europeana-api-client-ruby) [![Security](https://hakiri.io/github/europeana/europeana-api-client-ruby/develop.svg)](https://hakiri.io/github/europeana/europeana-api-client-ruby/develop) [![Maintainability](https://api.codeclimate.com/v1/badges/ee765a461fd16730c02d/maintainability)](https://codeclimate.com/github/europeana/europeana-api-client-ruby/maintainability) [![Test Coverage](https://api.codeclimate.com/v1/badges/ee765a461fd16730c02d/test_coverage)](https://codeclimate.com/github/europeana/europeana-api-client-ruby/test_coverage)
 
 Ruby client library for the search and retrieval of records from the [Europeana
-REST API](http://labs.europeana.eu/api/introduction/).
+REST APIs](https://pro.europeana.eu/resources/apis).
 
 ## Requirements
 
-* Ruby >= 2.2.2
+* Ruby >= 2.3
 
 ## Installation
 
@@ -35,7 +35,7 @@ gem install europeana-api
 
 Authentication by API key is *required* for all requests to the Europeana API.
 
-Sign up for an API key at: http://labs.europeana.eu/api/registration/
+Sign up for an API key at: https://pro.europeana.eu/get-api
 
 Configure your application with the API key:
 
@@ -66,7 +66,7 @@ search[:items] # => [ item1, item2, ... ]
 search[:totalResults] # => 81530
 ```
 
-See http://labs.europeana.eu/api/search/ for details of the available request
+See https://pro.europeana.eu/resources/apis/search for details of the available request
 parameters, and of the data returned in the search response.
 
 #### Fetch
@@ -77,7 +77,7 @@ record[:object][:title] # => ["Panorama des Schafberges in Ober-Österreich. Bla
 record[:object][:proxies].first[:dcCreator][:def] # => ["Simony, Friedrich"]
 ```
 
-See http://labs.europeana.eu/api/record/ for details of the data returned in
+See https://pro.europeana.eu/resources/apis/record for details of the data returned in
 the record response.
 
 #### Hierarchies
@@ -97,12 +97,9 @@ Europeana::API.record.following_siblings
 Europeana::API.record.ancestor_self_siblings
 ```
 
-See http://labs.europeana.eu/api/hierarchical-records for details of the various
-hierarchy methods and their responses.
-
 ### Annotations
 
-See http://labs.europeana.eu/api/annotations-methods for details of the responses
+See https://pro.europeana.eu/resources/apis/annotations for details of the responses
 received from the Annotations API methods.
 
 #### Search
