@@ -22,14 +22,15 @@ module Europeana
       class ParseJsonToVarious < ::FaradayMiddleware::ResponseMiddleware
         dependency do
           require 'json' unless defined?(JSON)
+          require 'multi_json' unless defined?(MultiJson)
         end
 
         define_parser do |body|
           unless body.strip.empty?
-            hash = JSON.parse(body)
+            hash = MultiJson.load(body)
             if Europeana::API.configuration.parse_json_to == OpenStruct
               underscored_hash = underscore_hash_keys(hash)
-              underscored_body = underscored_hash.to_json
+              underscored_body = MultiJson.dump(underscored_hash)
               JSON.parse(underscored_body, object_class: OpenStruct)
             else
               hash.with_indifferent_access
