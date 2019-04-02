@@ -12,7 +12,7 @@ Gem::Specification.new do |spec|
   spec.description   = 'Search and retrieve records from the Europeana REST API'
   spec.summary       = 'Ruby client library for the Europeana API'
   spec.homepage      = 'https://github.com/europeana/europeana-api-client-ruby'
-  spec.license       = 'EUPL V.1.1'
+  spec.license       = 'EUPL V.1.2'
 
   spec.files         = `git ls-files`.split($RS)
   spec.executables   = spec.files.grep(/^bin\//) { |f| File.basename(f) }
