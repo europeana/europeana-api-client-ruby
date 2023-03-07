@@ -1,3 +1,5 @@
+**This project is deprecated and not maintained anymore**
+
 # Europeana API
 
 [![Build Status](https://travis-ci.org/europeana/europeana-api-client-ruby.svg?branch=develop)](https://travis-ci.org/europeana/europeana-api-client-ruby) [![Security](https://hakiri.io/github/europeana/europeana-api-client-ruby/develop.svg)](https://hakiri.io/github/europeana/europeana-api-client-ruby/develop) [![Maintainability](https://api.codeclimate.com/v1/badges/ee765a461fd16730c02d/maintainability)](https://codeclimate.com/github/europeana/europeana-api-client-ruby/maintainability) [![Test Coverage](https://api.codeclimate.com/v1/badges/ee765a461fd16730c02d/test_coverage)](https://codeclimate.com/github/europeana/europeana-api-client-ruby/test_coverage)
